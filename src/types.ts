@@ -39,13 +39,6 @@ export const DEFAULT_SEARCH_PARAMS = {
 
 }
 
-export type SalesEvidenceFilterParams = {
-  landArea: MinMaxNumberType
-  buildArea: MinMaxNumberType
-  dateSold: MinMaxDateType
-  salePrice: MinMaxNumberType
-  saleType: SaleTypeEnum[]
-}
 export type IntersectedSearchAndFilterParams = SalesEvidenceFilterParams & SearchParametersType
 
 export enum SaleTypeEnum {
@@ -71,22 +64,6 @@ export type SalesEvidenceFilterParams = {
   dateSold: MinMaxDateType
   salePrice: MinMaxNumberType
   saleType: SaleTypeEnum[]
-}
-
-export enum SaleTypeEnum {
-  INV = 'INV',
-  VP = 'VP',
-  DEV = 'DEV'
-}
-
-export type MinMaxDateType = {
-  min: Date
-  max: Date
-}
-
-export type MinMaxNumberType = {
-  min: number
-  max: number
 }
 
 export type PositionType = {
@@ -149,6 +126,7 @@ export type ReactSelectOption = {
   value: string
   label: string
 }
+
 export type ReactSelectOptionEnum = {
     value: SaleTypeEnum
     label: SaleTypeEnum
