@@ -65,6 +65,30 @@ export type MinMaxNumberType = {
   max: number
 }
 
+export type SalesEvidenceFilterParams = {
+  landArea: MinMaxNumberType
+  buildArea: MinMaxNumberType
+  dateSold: any
+  salePrice: MinMaxNumberType
+  saleType: SaleTypeEnum[]
+}
+
+export enum SaleTypeEnum {
+  INV = 'INV',
+  VP = 'VP',
+  DEV = 'DEV'
+}
+
+export type MinMaxDateType = {
+  min: Date
+  max: Date
+}
+
+export type MinMaxNumberType = {
+  min: number
+  max: number
+}
+
 export type PositionType = {
     lat: number
     lng: number
