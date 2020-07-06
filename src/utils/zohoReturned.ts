@@ -1,3 +1,5 @@
+// TODO - REMOVE WHEN FINISHED!
+
 export const results: any = [
     {
         Owner: {
@@ -5,7 +7,7 @@ export const results: any = [
             id: '3430088000000176021',
             email: 'nicola.hill@johnhill.com.au'
         },
-        Build_Area_sqm: null,
+        Build_Area_sqm: 800,
         $currency_symbol: 'AU$',
         Suburb: 'CONCORD',
         Latitude: '-33.8671572',
@@ -353,7 +355,7 @@ export const results: any = [
             id: '3430088000000176021',
             email: 'nicola.hill@johnhill.com.au'
         },
-        Build_Area_sqm: null,
+        Build_Area_sqm: 1200,
         $currency_symbol: 'AU$',
         Suburb: 'NORTH STRATHFIELD',
         Latitude: '-33.8658986',
@@ -419,7 +421,7 @@ export const results: any = [
         Sale_Type: [
 
         ],
-        Land_Area_sqm: null,
+        Land_Area_sqm: 3000,
         Car_Spaces: null,
         $orchestration: false,
         Sales_Cycle_Duration: null,
@@ -593,7 +595,7 @@ export const results: any = [
         Sale_Type: [
 
         ],
-        Land_Area_sqm: null,
+        Land_Area_sqm: 2500,
         Car_Spaces: null,
         $orchestration: false,
         Sales_Cycle_Duration: null,
@@ -701,7 +703,7 @@ export const results: any = [
             id: '3430088000000176021',
             email: 'nicola.hill@johnhill.com.au'
         },
-        Build_Area_sqm: null,
+        Build_Area_sqm: 1200,
         $currency_symbol: 'AU$',
         Suburb: 'STRATHFIELD',
         Latitude: '-33.8652834',
@@ -767,7 +769,7 @@ export const results: any = [
         Sale_Type: [
 
         ],
-        Land_Area_sqm: null,
+        Land_Area_sqm: 1700,
         Car_Spaces: null,
         $orchestration: false,
         Sales_Cycle_Duration: null,
@@ -1302,7 +1304,7 @@ export const results: any = [
             id: '3430088000000176021',
             email: 'nicola.hill@johnhill.com.au'
         },
-        Build_Area_sqm: null,
+        Build_Area_sqm: 1000,
         $currency_symbol: 'AU$',
         Suburb: 'HOMEBUSH',
         Latitude: '-33.8641200',
@@ -1368,7 +1370,7 @@ export const results: any = [
         Sale_Type: [
 
         ],
-        Land_Area_sqm: null,
+        Land_Area_sqm: '2200',
         Car_Spaces: null,
         $orchestration: false,
         Sales_Cycle_Duration: null,
@@ -3042,7 +3044,7 @@ export const results: any = [
             id: '3430088000000176021',
             email: 'nicola.hill@johnhill.com.au'
         },
-        Build_Area_sqm: null,
+        Build_Area_sqm: 1200,
         $currency_symbol: 'AU$',
         Suburb: 'LIDCOMBE',
         Latitude: '-33.8491894',
@@ -3062,7 +3064,7 @@ export const results: any = [
         Stage: 'Prospecting',
         Strata_Plan: null,
         Street: 'Parramatta Road',
-        Sale_Price: null,
+        Sale_Price: 2000000,
         id: '3430088000003041116',
         $approved: true,
         Street_No: '11',
@@ -3108,12 +3110,12 @@ export const results: any = [
         Sale_Type: [
             'INV'
         ],
-        Land_Area_sqm: null,
+        Land_Area_sqm: 2500,
         Car_Spaces: null,
         $orchestration: false,
         Sales_Cycle_Duration: null,
         Property_Owners: '[{"Owner":{"name":"Nicola Hill","id":"3430088000000176021","email":"nicola.hill@johnhill.com.au"},"Company":"Bernies Auto Sales (Dist) Pty Ltd","Email":null,"Last_Mailed":null,"Postal_Suburb":"LIDCOMBE","$currency_symbol":"AU$","Suburb":null,"Postal_Street_No":"11","Unit":null,"Name":"Bernies Auto Sales (Dist) Pty Ltd","Last_Activity_Time":null,"Recent_Note":null,"$state":"save","$process_flow":false,"Work_Phone":null,"Currency":"AUD","Street":null,"Postal_State":"NSW","id":"3430088000003037129","$approved":true,"Postal_Postcode":"2141","Postal_Address":"11 Parramatta Road, LIDCOMBE","Street_No":null,"$approval":{"delegate":false,"approve":false,"reject":false,"resubmit":false},"Created_Time":"2020-04-27T13:03:17+10:00","Address_To":null,"Source_ID":"O0054","From_Ownership":null,"$editable":true,"Return_to_Sender":false,"Postcode":null,"Home_Phone":null,"Add_Note":null,"State":null,"Country":null,"Postal_Country":null,"$review_process":null,"Website":null,"Do_Not_Mail":false,"Last_Mailed_Date":null,"First_Name":null,"Record_Image":null,"$review":null,"Address_Longitude":null,"Postal_Level_Suite":null,"Email_Opt_Out":false,"Residential_Address":null,"Copy_to_Postal":false,"Address_Latitude":null,"Modified_Time":"2020-04-27T13:03:17+10:00","Salutation_Dear":null,"Postal_Street":"Parramatta Road","Title":null,"Return_to_Sender_Date":null,"Lessee":null,"Mobile":null,"$orchestration":null,"System_Contact":null,"Last_Name":null,"Reverse_Geocoded_Address":null,"ABN_ACN":null,"Postal_Unit":null,"Tag":[],"Level_Suite":null,"Fax":null}]',
-        Sale_Date: null,
+        Sale_Date: '1998-02-28',
         Total_Outgoings: null,
         Reverse_Geocoded_Address: '11 Parramatta Rd, Lidcombe NSW 2141, Australia',
         $in_merge: false,
@@ -3236,7 +3238,7 @@ export const results: any = [
         Stage: 'Prospecting',
         Strata_Plan: null,
         Street: 'Parramatta Road',
-        Sale_Price: null,
+        Sale_Price: 1750000,
         id: '3430088000003042204',
         $approved: true,
         Street_No: '63-79',
@@ -3287,7 +3289,7 @@ export const results: any = [
         $orchestration: false,
         Sales_Cycle_Duration: null,
         Property_Owners: '[{"Owner":{"name":"Nicola Hill","id":"3430088000000176021","email":"nicola.hill@johnhill.com.au"},"Company":"Cambooya Properties Pty Ltd","Email":null,"Last_Mailed":null,"Postal_Suburb":"SYDNEY","$currency_symbol":"AU$","Suburb":null,"Postal_Street_No":"99","Unit":null,"Name":"Cambooya Properties Pty Ltd","Last_Activity_Time":null,"Recent_Note":null,"$state":"save","$process_flow":false,"Work_Phone":null,"Currency":"AUD","Street":null,"Postal_State":"NSW","id":"3430088000003037174","$approved":true,"Postal_Postcode":"2000","Postal_Address":"99 Macquarie Street , SYDNEY","Street_No":null,"$approval":{"delegate":false,"approve":false,"reject":false,"resubmit":false},"Created_Time":"2020-04-27T13:03:17+10:00","Address_To":null,"Source_ID":"O0099","From_Ownership":null,"$editable":true,"Return_to_Sender":false,"Postcode":null,"Home_Phone":null,"Add_Note":null,"State":null,"Country":null,"Postal_Country":null,"$review_process":null,"Website":null,"Do_Not_Mail":false,"Last_Mailed_Date":null,"First_Name":null,"Record_Image":null,"$review":null,"Address_Longitude":null,"Postal_Level_Suite":null,"Email_Opt_Out":false,"Residential_Address":null,"Copy_to_Postal":false,"Address_Latitude":null,"Modified_Time":"2020-04-27T13:03:17+10:00","Salutation_Dear":null,"Postal_Street":"Macquarie Street","Title":null,"Return_to_Sender_Date":null,"Lessee":null,"Mobile":null,"$orchestration":null,"System_Contact":null,"Last_Name":null,"Reverse_Geocoded_Address":null,"ABN_ACN":null,"Postal_Unit":null,"Tag":[],"Level_Suite":null,"Fax":null}]',
-        Sale_Date: null,
+        Sale_Date: '2012-07-13',
         Total_Outgoings: null,
         Reverse_Geocoded_Address: '63-79 Parramatta Rd, Silverwater NSW 2128, Australia',
         $in_merge: false,
@@ -3584,7 +3586,7 @@ export const results: any = [
         Stage: 'Prospecting',
         Strata_Plan: null,
         Street: 'Parramatta Road',
-        Sale_Price: null,
+        Sale_Price: 1500000,
         id: '3430088000003041164',
         $approved: true,
         Street_No: '145',
@@ -3635,7 +3637,7 @@ export const results: any = [
         $orchestration: false,
         Sales_Cycle_Duration: null,
         Property_Owners: '[{"Owner":{"name":"Nicola Hill","id":"3430088000000176021","email":"nicola.hill@johnhill.com.au"},"Company":"Ching Yu Joe Wong","Email":null,"Last_Mailed":null,"Postal_Suburb":"AUBURN","$currency_symbol":"AU$","Suburb":null,"Postal_Street_No":"145","Unit":null,"Name":"Ching Yu Joe Wong","Last_Activity_Time":null,"Recent_Note":null,"$state":"save","$process_flow":false,"Work_Phone":null,"Currency":"AUD","Street":null,"Postal_State":"NSW","id":"3430088000003037311","$approved":true,"Postal_Postcode":"2144","Postal_Address":"145 Parramatta Road, AUBURN","Street_No":null,"$approval":{"delegate":false,"approve":false,"reject":false,"resubmit":false},"Created_Time":"2020-04-27T13:03:18+10:00","Address_To":null,"Source_ID":"O0132","From_Ownership":null,"$editable":true,"Return_to_Sender":false,"Postcode":null,"Home_Phone":null,"Add_Note":null,"State":null,"Country":null,"Postal_Country":null,"$review_process":null,"Website":null,"Do_Not_Mail":false,"Last_Mailed_Date":null,"First_Name":null,"Record_Image":null,"$review":null,"Address_Longitude":null,"Postal_Level_Suite":null,"Email_Opt_Out":false,"Residential_Address":null,"Copy_to_Postal":false,"Address_Latitude":null,"Modified_Time":"2020-04-27T13:03:18+10:00","Salutation_Dear":null,"Postal_Street":"Parramatta Road","Title":null,"Return_to_Sender_Date":null,"Lessee":null,"Mobile":null,"$orchestration":null,"System_Contact":null,"Last_Name":null,"Reverse_Geocoded_Address":null,"ABN_ACN":null,"Postal_Unit":null,"Tag":[],"Level_Suite":null,"Fax":null}]',
-        Sale_Date: null,
+        Sale_Date: '2006-12-01',
         Total_Outgoings: null,
         Reverse_Geocoded_Address: '145 Parramatta Rd, Auburn NSW 2144, Australia',
         $in_merge: false,
@@ -5533,7 +5535,7 @@ export const results: any = [
         $orchestration: false,
         Sales_Cycle_Duration: null,
         Property_Owners: '[{"Owner":{"name":"Nicola Hill","id":"3430088000000176021","email":"nicola.hill@johnhill.com.au"},"Company":"Bingo Property Pty Ltd","Email":null,"Last_Mailed":null,"Postal_Suburb":"AUBURN","$currency_symbol":"AU$","Suburb":null,"Postal_Street_No":"305","Unit":null,"Name":"Bingo Property Pty Ltd","Last_Activity_Time":null,"Recent_Note":null,"$state":"save","$process_flow":false,"Work_Phone":null,"Currency":"AUD","Street":null,"Postal_State":"NSW","id":"3430088000003037134","$approved":true,"Postal_Postcode":"2144","Postal_Address":"305 Parramatta Road, AUBURN","Street_No":null,"$approval":{"delegate":false,"approve":false,"reject":false,"resubmit":false},"Created_Time":"2020-04-27T13:03:17+10:00","Address_To":null,"Source_ID":"O0059","From_Ownership":null,"$editable":true,"Return_to_Sender":false,"Postcode":null,"Home_Phone":null,"Add_Note":null,"State":null,"Country":null,"Postal_Country":null,"$review_process":null,"Website":null,"Do_Not_Mail":false,"Last_Mailed_Date":null,"First_Name":null,"Record_Image":null,"$review":null,"Address_Longitude":null,"Postal_Level_Suite":null,"Email_Opt_Out":false,"Residential_Address":null,"Copy_to_Postal":false,"Address_Latitude":null,"Modified_Time":"2020-04-27T13:03:17+10:00","Salutation_Dear":null,"Postal_Street":"Parramatta Road","Title":null,"Return_to_Sender_Date":null,"Lessee":null,"Mobile":null,"$orchestration":null,"System_Contact":null,"Last_Name":null,"Reverse_Geocoded_Address":null,"ABN_ACN":null,"Postal_Unit":null,"Tag":[],"Level_Suite":null,"Fax":null}]',
-        Sale_Date: null,
+        Sale_Date: '2007-04-23',
         Total_Outgoings: null,
         Reverse_Geocoded_Address: '305 Parramatta Rd, Auburn NSW 2144, Australia',
         $in_merge: false,
@@ -5656,7 +5658,7 @@ export const results: any = [
         Stage: 'Prospecting',
         Strata_Plan: null,
         Street: 'Parramatta Road',
-        Sale_Price: null,
+        Sale_Price: 500000,
         id: '3430088000003042613',
         $approved: true,
         Street_No: '66',
@@ -6257,7 +6259,7 @@ export const results: any = [
         Stage: 'Prospecting',
         Strata_Plan: null,
         Street: 'Parramatta Road',
-        Sale_Price: null,
+        Sale_Price: 900000,
         id: '3430088000003041175',
         $approved: true,
         Street_No: '151',
@@ -6308,8 +6310,8 @@ export const results: any = [
         $orchestration: false,
         Sales_Cycle_Duration: null,
         Property_Owners: '[{"Owner":{"name":"Nicola Hill","id":"3430088000000176021","email":"nicola.hill@johnhill.com.au"},"Company":"Bezliz Pty Ltd","Email":null,"Last_Mailed":null,"Postal_Suburb":null,"$currency_symbol":"AU$","Suburb":null,"Postal_Street_No":null,"Unit":null,"Name":"Bezliz Pty Ltd","Last_Activity_Time":null,"Recent_Note":null,"$state":"save","$process_flow":false,"Work_Phone":null,"Currency":"AUD","Street":null,"Postal_State":null,"id":"3430088000003037130","$approved":true,"Postal_Postcode":null,"Postal_Address":null,"Street_No":null,"$approval":{"delegate":false,"approve":false,"reject":false,"resubmit":false},"Created_Time":"2020-04-27T13:03:17+10:00","Address_To":null,"Source_ID":"O0055","From_Ownership":null,"$editable":true,"Return_to_Sender":false,"Postcode":null,"Home_Phone":null,"Add_Note":null,"State":null,"Country":null,"Postal_Country":null,"$review_process":null,"Website":null,"Do_Not_Mail":false,"Last_Mailed_Date":null,"First_Name":null,"Record_Image":null,"$review":null,"Address_Longitude":null,"Postal_Level_Suite":null,"Email_Opt_Out":false,"Residential_Address":null,"Copy_to_Postal":false,"Address_Latitude":null,"Modified_Time":"2020-04-27T13:03:17+10:00","Salutation_Dear":null,"Postal_Street":null,"Title":null,"Return_to_Sender_Date":null,"Lessee":null,"Mobile":null,"$orchestration":null,"System_Contact":null,"Last_Name":null,"Reverse_Geocoded_Address":null,"ABN_ACN":null,"Postal_Unit":null,"Tag":[],"Level_Suite":null,"Fax":null}]',
-        Sale_Date: null,
-        Total_Outgoings: null,
+        Sale_Date: '2001-11-9',
+        Total_Outgoings: '2018-11-09',
         Reverse_Geocoded_Address: '151 Parramatta Rd, Granville NSW 2142, Australia',
         $in_merge: false,
         Insurance: null,

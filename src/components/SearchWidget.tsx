@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent } from 'react'
 import { PropertyTypeDropdown } from './PropertyTypeDropdown'
 import { PropertyGroupDropdown } from './PropertyGroupDropdown'
 import { ManagedDrop } from './ManagedDrop'
@@ -22,7 +22,6 @@ export function SearchWidget (props: SearchWidgetProps) {
                 }} placeholder="Defaults to 528 Kent St, Sydney, NSW, 2000" id="propertyAddress" required tabIndex={1} />
                 <p className="smaller-font">* Must contain street, suburb, state & postcode with each separated by comma</p>
             </label>
-            <DatePicker />
             <PropertyTypeDropdown chosenPropertyTypes={props.searchParameters.propertyTypes} changePropertyTypes={(newPropertyTypes) => {
                 props.changeSearchParameters({
                     ...props.searchParameters,
