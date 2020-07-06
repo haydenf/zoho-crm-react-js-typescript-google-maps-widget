@@ -1,4 +1,4 @@
-import { SearchParametersType, UnprocessedResultsFromCRM, PositionType } from '../types'
+import { IntersectedSearchAndFilterParams, UnprocessedResultsFromCRM, PositionType } from '../types'
 import { ZOHO } from '../vendor/ZSDK'
 import emailAndIdExtract from '../utils/emailAndIdExtract'
 import filterResults from '../utils/filterResults'
@@ -27,24 +27,19 @@ const retrieveAllRecords = async function (pageNumber: number, retrievedProperti
     )
 }
 
-export async function findMatchingRecords (searchParameters: SearchParametersType[], entity: string): Promise<{ matchedProperties: UnprocessedResultsFromCRM[], uniqueSearchRecords: string[] }> {
+export async function findMatchingRecords (searchParameters: IntersectedSearchAndFilterParams[], entity: string): Promise<{ matchedProperties: UnprocessedResultsFromCRM[], uniqueSearchRecords: string[] }> {
     const matchingResults = await retrieveAllRecords(0, [], entity)
 
     if (Object.keys(matchingResults).includes('Error')) {
         alert('Error retrieving search results')
     }
-<<<<<<< HEAD
-    const results = filterResults(matchingResults, searchParameters)
-=======
+
     const results = filterResults(matchingResults, searchParameters, entity)
-    // const results = sortAndFilterResults(matchingResults.details.output, searchParameters)
-    // if statement here to see if user is on Sales Evidence Widget
->>>>>>> Update - filtering logic and add to filterResults
 
     return results
 }
 
-export async function getSearchAddressPosition (searchParameters: SearchParametersType[]): Promise<PositionType> {
+export async function getSearchAddressPosition (searchParameters: IntersectedSearchAndFilterParams[]): Promise<PositionType> {
     const firstSearchAddress = searchParameters[0].searchAddress
 
     const geocodeResult = await ZOHO.CRM.FUNCTIONS.execute('geocode_address', {
