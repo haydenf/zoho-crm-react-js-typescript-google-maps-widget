@@ -1,4 +1,3 @@
-// TODO - tsconfig replace CommonJS with esnext
 import { SalesEvidenceFilterParams, SaleTypeEnum, UnprocessedResultsFromCRM, MinMaxNumberType, MinMaxDateType } from '../types'
 
 function genericFilter (property: UnprocessedResultsFromCRM, filterType: string, filterValues: MinMaxNumberType) {

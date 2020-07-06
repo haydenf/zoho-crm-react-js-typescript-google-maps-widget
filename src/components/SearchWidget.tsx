@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent } from 'react'
 import { PropertyTypeDropdown } from './PropertyTypeDropdown'
 import { PropertyGroupDropdown } from './PropertyGroupDropdown'
 import { ManagedDrop } from './ManagedDrop'
