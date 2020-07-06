@@ -33,6 +33,8 @@ export async function findMatchingProperties (searchParameters: SearchParameters
         alert('Error retrieving search results')
     }
     const results = filterResults(matchingResults, searchParameters)
+    // const results = sortAndFilterResults(matchingResults.details.output, searchParameters)
+    // if statement here to see if user is on Sales Evidence Widget
 
     return results
 }
