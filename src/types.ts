@@ -68,7 +68,7 @@ export type MinMaxNumberType = {
 export type SalesEvidenceFilterParams = {
   landArea: MinMaxNumberType
   buildArea: MinMaxNumberType
-  dateSold: any
+  dateSold: MinMaxDateType
   salePrice: MinMaxNumberType
   saleType: SaleTypeEnum[]
 }
