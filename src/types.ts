@@ -1,3 +1,6 @@
+export type IntersectedSearchAndFilterParams = SalesEvidenceFilterParams & SearchParametersType
+
+
 export type SearchParametersType = {
     searchAddress: string
     propertyTypes: string[]
@@ -9,6 +12,52 @@ export type SearchParametersType = {
     id: string
 }
 
+const DEFAULT_SALES_EVIDENCE_PARAMS = {
+  landArea: {
+    min: -1,
+    max: -1
+  },
+  buildArea: {
+      min: -1,
+      max: -1
+  },
+  dateSold: {
+      min: new Date(),
+      max: new Date()
+  },
+  salePrice: {
+      min: -1,
+      max: -1
+  },
+  saleType: []
+}
+
+const DEFAULT_LEASE_EVIDENCE_PARAMS = {
+  landArea: {
+    min: 0,
+    max: 0
+  },
+  buildArea: {
+      min: 0,
+      max: 0
+  },
+  rentGross: {
+      min: 0,
+      max: 0
+  },
+  rentDollarMeter: {
+      min: 0,
+      max: 0
+  },
+  leasedDate: {
+      min: new Date(),
+      max: new Date()
+  },
+  reviewDate: {
+      min: new Date(),
+      max: new Date()
+  }
+}
 export const DEFAULT_SEARCH_PARAMS = {
     searchAddress: '528 Kent St, Sydney, NSW, 2000',
     propertyGroupsMaxResults: Infinity,
@@ -19,29 +68,8 @@ export const DEFAULT_SEARCH_PARAMS = {
     managed: ['All'],
     readyForSearch: false,
     id: `search:${(Math.random() * 1000)}`,
-    landArea: {
-        min: -1,
-        max: -1
-    },
-    buildArea: {
-        min: -1,
-        max: -1
-    },
-    dateSold: {
-        min: new Date(),
-        max: new Date()
-    },
-    salePrice: {
-        min: -1,
-        max: -1
-    },
-    saleType: []
+    ...DEFAULT_SALES_EVIDENCE_PARAMS
 }
-
-}
-
-export type IntersectedSearchAndFilterParams = SalesEvidenceFilterParams & SearchParametersType
-
 export enum SaleTypeEnum {
   ALL = 'ALL',
   INV = 'INV',
@@ -65,7 +93,6 @@ export type SalesEvidenceFilterParams = {
   dateSold: MinMaxDateType
   salePrice: MinMaxNumberType
   saleType: SaleTypeEnum[]
-}
 
 export type LeaseEvidenceFilterParams = {
   landArea: MinMaxNumberType
@@ -74,16 +101,6 @@ export type LeaseEvidenceFilterParams = {
   rentDollarMeter: MinMaxNumberType
   leasedDate: MinMaxDateType
   reviewDate: MinMaxDateType
-}
-
-export type MinMaxNumberType = {
-  min: number
-  max: number
-}
-
-export type MinMaxDateType = {
-  min: Date
-  max: Date
 }
 
 export type PositionType = {
