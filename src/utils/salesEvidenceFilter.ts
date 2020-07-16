@@ -27,7 +27,7 @@ function saleTypeFilter (property: UnprocessedResultsFromCRM, saleTypes: SaleTyp
     })
 }
 
-export default function salesEvidenceFilter (sortedAndFilteredResults: UnprocessedResultsFromCRM[], filterParameters: SalesEvidenceFilterParams) {
+export default function salesEvidenceFilter (property: UnprocessedResultsFromCRM, filterParameters: SalesEvidenceFilterParams): boolean {
     const {
         landArea,
         buildArea,
@@ -35,15 +35,11 @@ export default function salesEvidenceFilter (sortedAndFilteredResults: Unprocess
         saleType,
         dateSold
     } = filterParameters
-    const filteredResults: UnprocessedResultsFromCRM[] = []
-    sortedAndFilteredResults.some((property: UnprocessedResultsFromCRM) => {
-        const isInLandAreaRange = genericFilter(property, 'Land_Area_sqm', landArea)
-        const isInBuildAreaRange = genericFilter(property, 'Build_Area_sqm', buildArea)
-        const isInSalePriceRange = genericFilter(property, 'Sale_Price', salePrice)
-        const isInSaleType = saleTypeFilter(property, saleType)
-        const isInSaleDateRange = dateFilter(property, dateSold)
-        // TODO - waiting on Chris to let us know if it'll be AND or OR logic
-        if (isInLandAreaRange || isInBuildAreaRange || isInSalePriceRange || isInSaleType || isInSaleDateRange) filteredResults.push(property)
-    })
-    return filteredResults
+    const isInLandAreaRange = genericFilter(property, 'Land_Area_sqm', landArea)
+    const isInBuildAreaRange = genericFilter(property, 'Build_Area_sqm', buildArea)
+    const isInSalePriceRange = genericFilter(property, 'Sale_Price', salePrice)
+    const isInSaleType = saleTypeFilter(property, saleType)
+    const isInSaleDateRange = dateFilter(property, dateSold)
+    // USING && logic but also if no value is entered it is skipped
+    return isInLandAreaRange || isInBuildAreaRange || isInSalePriceRange || isInSaleType || isInSaleDateRange
 }

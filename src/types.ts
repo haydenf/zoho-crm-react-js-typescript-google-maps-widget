@@ -18,24 +18,25 @@ export const DEFAULT_SEARCH_PARAMS = {
     propertyGroups: ['All'],
     managed: ['All'],
     readyForSearch: false,
+    id: `search:${(Math.random() * 1000)}`,
     landArea: {
-        min: 0,
-        max: 10000
+        min: -1,
+        max: -1
     },
     buildArea: {
-        min: 0,
-        max: 10000
+        min: -1,
+        max: -1
     },
     dateSold: {
         min: new Date(),
         max: new Date()
     },
     salePrice: {
-        min: 0,
-        max: 1000000
+        min: -1,
+        max: -1
     },
-    saleType: [],
-    id: `search:${(Math.random() * 1000)}`
+    saleType: []
+}
 
 }
 
