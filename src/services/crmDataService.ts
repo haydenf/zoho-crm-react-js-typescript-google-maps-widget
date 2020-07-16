@@ -33,7 +33,13 @@ export async function findMatchingRecords (searchParameters: SearchParametersTyp
     if (Object.keys(matchingResults).includes('Error')) {
         alert('Error retrieving search results')
     }
+<<<<<<< HEAD
     const results = filterResults(matchingResults, searchParameters)
+=======
+    const results = filterResults(matchingResults, searchParameters, entity)
+    // const results = sortAndFilterResults(matchingResults.details.output, searchParameters)
+    // if statement here to see if user is on Sales Evidence Widget
+>>>>>>> Update - filtering logic and add to filterResults
 
     return results
 }

@@ -1117,7 +1117,7 @@ export const results: any = [
         Sale_Type: [
 
         ],
-        Land_Area_sqm: null,
+        Land_Area_sqm: 2800,
         Car_Spaces: null,
         $orchestration: false,
         Sales_Cycle_Duration: null,
@@ -1370,7 +1370,7 @@ export const results: any = [
         Sale_Type: [
 
         ],
-        Land_Area_sqm: '2200',
+        Land_Area_sqm: 2200,
         Car_Spaces: null,
         $orchestration: false,
         Sales_Cycle_Duration: null,
@@ -3044,7 +3044,7 @@ export const results: any = [
             id: '3430088000000176021',
             email: 'nicola.hill@johnhill.com.au'
         },
-        Build_Area_sqm: 1200,
+        Build_Area_sqm: 900,
         $currency_symbol: 'AU$',
         Suburb: 'LIDCOMBE',
         Latitude: '-33.8491894',
@@ -3110,12 +3110,12 @@ export const results: any = [
         Sale_Type: [
             'INV'
         ],
-        Land_Area_sqm: 2500,
+        Land_Area_sqm: 2400,
         Car_Spaces: null,
         $orchestration: false,
         Sales_Cycle_Duration: null,
         Property_Owners: '[{"Owner":{"name":"Nicola Hill","id":"3430088000000176021","email":"nicola.hill@johnhill.com.au"},"Company":"Bernies Auto Sales (Dist) Pty Ltd","Email":null,"Last_Mailed":null,"Postal_Suburb":"LIDCOMBE","$currency_symbol":"AU$","Suburb":null,"Postal_Street_No":"11","Unit":null,"Name":"Bernies Auto Sales (Dist) Pty Ltd","Last_Activity_Time":null,"Recent_Note":null,"$state":"save","$process_flow":false,"Work_Phone":null,"Currency":"AUD","Street":null,"Postal_State":"NSW","id":"3430088000003037129","$approved":true,"Postal_Postcode":"2141","Postal_Address":"11 Parramatta Road, LIDCOMBE","Street_No":null,"$approval":{"delegate":false,"approve":false,"reject":false,"resubmit":false},"Created_Time":"2020-04-27T13:03:17+10:00","Address_To":null,"Source_ID":"O0054","From_Ownership":null,"$editable":true,"Return_to_Sender":false,"Postcode":null,"Home_Phone":null,"Add_Note":null,"State":null,"Country":null,"Postal_Country":null,"$review_process":null,"Website":null,"Do_Not_Mail":false,"Last_Mailed_Date":null,"First_Name":null,"Record_Image":null,"$review":null,"Address_Longitude":null,"Postal_Level_Suite":null,"Email_Opt_Out":false,"Residential_Address":null,"Copy_to_Postal":false,"Address_Latitude":null,"Modified_Time":"2020-04-27T13:03:17+10:00","Salutation_Dear":null,"Postal_Street":"Parramatta Road","Title":null,"Return_to_Sender_Date":null,"Lessee":null,"Mobile":null,"$orchestration":null,"System_Contact":null,"Last_Name":null,"Reverse_Geocoded_Address":null,"ABN_ACN":null,"Postal_Unit":null,"Tag":[],"Level_Suite":null,"Fax":null}]',
-        Sale_Date: '1998-02-28',
+        Sale_Date: '1994-02-28',
         Total_Outgoings: null,
         Reverse_Geocoded_Address: '11 Parramatta Rd, Lidcombe NSW 2141, Australia',
         $in_merge: false,
@@ -5876,7 +5876,7 @@ export const results: any = [
         Modified_Time: '2020-05-23T17:38:32+10:00',
         Prop_Zoning: null,
         Sale_Type: [
-
+            'DEV'
         ],
         Land_Area_sqm: null,
         Car_Spaces: null,

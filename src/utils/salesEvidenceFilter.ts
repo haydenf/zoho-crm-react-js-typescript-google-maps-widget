@@ -1,7 +1,7 @@
 // TODO - tsconfig replace CommonJS with esnext
 import { SalesEvidenceFilterParams, SaleTypeEnum, UnprocessedResultsFromCRM, MinMaxNumberType, MinMaxDateType } from '../types'
 
-function genericFilter (property: UnprocessedResultsFromCRM, filterType: string, filterValues: MinMaxNumberType | any) {
+function genericFilter (property: UnprocessedResultsFromCRM, filterType: string, filterValues: MinMaxNumberType) {
     return typeof property[filterType] === 'number' && property[filterType] >= filterValues.min && property[filterType] <= filterValues.max
 }
 
@@ -27,19 +27,30 @@ function saleTypeFilter (property: UnprocessedResultsFromCRM, saleTypes: SaleTyp
     })
 }
 
-export default function salesEvidenceFilter (property: UnprocessedResultsFromCRM, filterParameters: SalesEvidenceFilterParams): boolean {
+export default function salesEvidenceFilter (property: UnprocessedResultsFromCRM, filterParameters: SalesEvidenceFilterParams[]): boolean {
     const {
         landArea,
         buildArea,
         salePrice,
         saleType,
         dateSold
-    } = filterParameters
-    const isInLandAreaRange = genericFilter(property, 'Land_Area_sqm', landArea)
-    const isInBuildAreaRange = genericFilter(property, 'Build_Area_sqm', buildArea)
-    const isInSalePriceRange = genericFilter(property, 'Sale_Price', salePrice)
-    const isInSaleType = saleTypeFilter(property, saleType)
-    const isInSaleDateRange = dateFilter(property, dateSold)
-    // USING && logic but also if no value is entered it is skipped
+    } = filterParameters[0]
+    const FILTER_NOT_USED_NUM_TYPE = -1
+    const isLandAreaFilterInUse = landArea.min === FILTER_NOT_USED_NUM_TYPE && landArea.max === FILTER_NOT_USED_NUM_TYPE
+    const isInLandAreaRange = !isLandAreaFilterInUse && genericFilter(property, 'Land_Area_sqm', landArea)
+
+    const isBuildAreaFilterInUse = buildArea.min === FILTER_NOT_USED_NUM_TYPE && buildArea.max === FILTER_NOT_USED_NUM_TYPE
+    const isInBuildAreaRange = !isBuildAreaFilterInUse && genericFilter(property, 'Build_Area_sqm', buildArea)
+
+    const isSalePriceFilterInUse = salePrice.min === FILTER_NOT_USED_NUM_TYPE && salePrice.max === FILTER_NOT_USED_NUM_TYPE
+    const isInSalePriceRange = !isSalePriceFilterInUse && genericFilter(property, 'Sale_Price', salePrice)
+
+    const FILTER_NOT_USED_ARR_TYPE = 0
+    const isSaleTypeFilterInUse = saleType.length === FILTER_NOT_USED_ARR_TYPE
+    const isInSaleType = !isSaleTypeFilterInUse && saleTypeFilter(property, saleType)
+
+    const isDateSoldFilterInUse = dateSold.min === dateSold.max
+    const isInSaleDateRange = !isDateSoldFilterInUse && dateFilter(property, dateSold)
+
     return isInLandAreaRange || isInBuildAreaRange || isInSalePriceRange || isInSaleType || isInSaleDateRange
 }

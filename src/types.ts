@@ -1,62 +1,61 @@
-export type IntersectedSearchAndFilterParams = SalesEvidenceFilterParams & SearchParametersType
+export type IntersectedSearchAndFilterParams = SalesEvidenceFilterParams & BaseSearchParamsType
 
-
-export type SearchParametersType = {
-    searchAddress: string
-    propertyTypes: string[]
-    propertyGroups: string[]
-    neighboursSearchMaxRecords: number
-    propertyGroupsMaxResults: number
-    propertyTypesMaxResults: number
-    managed: string[]
-    id: string
+export type BaseSearchParamsType = {
+  searchAddress: string
+  propertyTypes: string[]
+  propertyGroups: string[]
+  neighboursSearchMaxRecords: number
+  propertyGroupsMaxResults: number
+  propertyTypesMaxResults: number
+  managed: string[]
+  id: string
 }
 
 const DEFAULT_SALES_EVIDENCE_PARAMS = {
-  landArea: {
-    min: -1,
-    max: -1
-  },
-  buildArea: {
-      min: -1,
-      max: -1
-  },
-  dateSold: {
-      min: new Date(),
-      max: new Date()
-  },
-  salePrice: {
-      min: -1,
-      max: -1
-  },
-  saleType: []
+    landArea: {
+        min: -1,
+        max: -1
+    },
+    buildArea: {
+        min: -1,
+        max: -1
+    },
+    dateSold: {
+        min: new Date(),
+        max: new Date()
+    },
+    salePrice: {
+        min: -1,
+        max: -1
+    },
+    saleType: []
 }
 
 const DEFAULT_LEASE_EVIDENCE_PARAMS = {
-  landArea: {
-    min: 0,
-    max: 0
-  },
-  buildArea: {
-      min: 0,
-      max: 0
-  },
-  rentGross: {
-      min: 0,
-      max: 0
-  },
-  rentDollarMeter: {
-      min: 0,
-      max: 0
-  },
-  leasedDate: {
-      min: new Date(),
-      max: new Date()
-  },
-  reviewDate: {
-      min: new Date(),
-      max: new Date()
-  }
+    landArea: {
+        min: 0,
+        max: 0
+    },
+    buildArea: {
+        min: 0,
+        max: 0
+    },
+    rentGross: {
+        min: 0,
+        max: 0
+    },
+    rentDollarMeter: {
+        min: 0,
+        max: 0
+    },
+    leasedDate: {
+        min: new Date(),
+        max: new Date()
+    },
+    reviewDate: {
+        min: new Date(),
+        max: new Date()
+    }
 }
 export const DEFAULT_SEARCH_PARAMS = {
     searchAddress: '528 Kent St, Sydney, NSW, 2000',
@@ -68,8 +67,10 @@ export const DEFAULT_SEARCH_PARAMS = {
     managed: ['All'],
     readyForSearch: false,
     id: `search:${(Math.random() * 1000)}`,
-    ...DEFAULT_SALES_EVIDENCE_PARAMS
+    ...DEFAULT_SALES_EVIDENCE_PARAMS,
+    ...DEFAULT_LEASE_EVIDENCE_PARAMS
 }
+
 export enum SaleTypeEnum {
   ALL = 'ALL',
   INV = 'INV',
@@ -93,6 +94,7 @@ export type SalesEvidenceFilterParams = {
   dateSold: MinMaxDateType
   salePrice: MinMaxNumberType
   saleType: SaleTypeEnum[]
+}
 
 export type LeaseEvidenceFilterParams = {
   landArea: MinMaxNumberType
