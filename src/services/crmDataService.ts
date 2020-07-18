@@ -3,9 +3,9 @@ import { ZOHO } from '../vendor/ZSDK'
 import emailAndIdExtract from '../utils/emailAndIdExtract'
 import filterResults from '../utils/filterResults'
 
-async function getPageOfRecords (pageNumber: number, entity: string) {
+async function getPageOfRecords (pageNumber: number, zohoModuleToUse: string) {
     const response = await ZOHO.CRM.API.getAllRecords({
-        Entity: entity,
+        Entity: zohoModuleToUse,
         page: pageNumber,
         per_page: 200
     })
@@ -15,26 +15,27 @@ async function getPageOfRecords (pageNumber: number, entity: string) {
     return response.data
 }
 
-const retrieveAllRecords = async function (pageNumber: number, retrievedProperties: UnprocessedResultsFromCRM[], entity: string): Promise<UnprocessedResultsFromCRM[]> {
-    const thisPageResults = await getPageOfRecords(pageNumber, entity)
+const retrieveAllRecords = async function (pageNumber: number, retrievedProperties: UnprocessedResultsFromCRM[], zohoModuleToUse: string): Promise<UnprocessedResultsFromCRM[]> {
+    const thisPageResults = await getPageOfRecords(pageNumber, zohoModuleToUse)
     if (thisPageResults.length === 0) {
         return retrievedProperties
     }
     return retrieveAllRecords(
         pageNumber + 1,
         retrievedProperties.concat(thisPageResults),
-        entity
+        zohoModuleToUse
     )
 }
 
-export async function findMatchingRecords (searchParameters: IntersectedSearchAndFilterParams[], entity: string): Promise<{ matchedProperties: UnprocessedResultsFromCRM[], uniqueSearchRecords: string[] }> {
-    const matchingResults = await retrieveAllRecords(0, [], entity)
+export async function findMatchingRecords (searchParameters: IntersectedSearchAndFilterParams[], filterInUse: string): Promise<{ matchedProperties: UnprocessedResultsFromCRM[], uniqueSearchRecords: string[] }> {
+    const zohoModuleToUse = filterInUse === 'LeasesEvidenceFilter' ? 'Properties' : 'Deals'
+    const matchingResults = await retrieveAllRecords(0, [], zohoModuleToUse)
 
     if (Object.keys(matchingResults).includes('Error')) {
         alert('Error retrieving search results')
     }
 
-    const results = filterResults(matchingResults, searchParameters, entity)
+    const results = filterResults(matchingResults, searchParameters, filterInUse)
 
     return results
 }

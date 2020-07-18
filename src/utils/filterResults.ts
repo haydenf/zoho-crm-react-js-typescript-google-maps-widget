@@ -1,4 +1,4 @@
-import { SearchParametersType, UnprocessedResultsFromCRM, OwnerType } from '../types'
+import { IntersectedSearchAndFilterParams, UnprocessedResultsFromCRM, OwnerType } from '../types'
 import salesEvidenceFilter from './salesEvidenceFilter'
 
 type MatchTallies = {
@@ -38,7 +38,7 @@ function getOwnerData (property: UnprocessedResultsFromCRM) {
     return ownerData
 }
 
-export default function filterResults (unsortedPropertyResults: UnprocessedResultsFromCRM[], searchParameters: SearchParametersType[], filterType: string): { matchedProperties: UnprocessedResultsFromCRM[], uniqueSearchRecords: string[] } {
+export default function filterResults (unsortedPropertyResults: UnprocessedResultsFromCRM[], searchParameters: IntersectedSearchAndFilterParams[], filterInUse: string): { matchedProperties: UnprocessedResultsFromCRM[], uniqueSearchRecords: string[] } {
     const maxNumNeighbours = searchParameters[0].neighboursSearchMaxRecords
     const maxResultsForPropertyTypes = searchParameters[0].propertyTypesMaxResults
     const maxResultsForPropertyGroups = searchParameters[0].propertyGroupsMaxResults
@@ -60,7 +60,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         const maxGroupTypes = matchTallies.propertyGroup < maxResultsForPropertyGroups
         let canAddAnotherProperty = maxNeighours || maxPropertyTypes || maxGroupTypes
 
-        if (filterType === 'SalesEvidence') {
+        if (filterInUse === 'SalesEvidenceFilter') {
             canAddAnotherProperty = canAddAnotherProperty && salesEvidenceFilter(property, searchParameters)
         }
 

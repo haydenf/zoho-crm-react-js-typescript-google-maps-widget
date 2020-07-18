@@ -21,8 +21,8 @@ const DEFAULT_SALES_EVIDENCE_PARAMS = {
         max: -1
     },
     dateSold: {
-        min: new Date(),
-        max: new Date()
+        min: undefined,
+        max: undefined
     },
     salePrice: {
         min: -1,
@@ -31,32 +31,6 @@ const DEFAULT_SALES_EVIDENCE_PARAMS = {
     saleType: []
 }
 
-const DEFAULT_LEASE_EVIDENCE_PARAMS = {
-    landArea: {
-        min: 0,
-        max: 0
-    },
-    buildArea: {
-        min: 0,
-        max: 0
-    },
-    rentGross: {
-        min: 0,
-        max: 0
-    },
-    rentDollarMeter: {
-        min: 0,
-        max: 0
-    },
-    leasedDate: {
-        min: new Date(),
-        max: new Date()
-    },
-    reviewDate: {
-        min: new Date(),
-        max: new Date()
-    }
-}
 export const DEFAULT_SEARCH_PARAMS = {
     searchAddress: '528 Kent St, Sydney, NSW, 2000',
     propertyGroupsMaxResults: Infinity,
@@ -67,8 +41,7 @@ export const DEFAULT_SEARCH_PARAMS = {
     managed: ['All'],
     readyForSearch: false,
     id: `search:${(Math.random() * 1000)}`,
-    ...DEFAULT_SALES_EVIDENCE_PARAMS,
-    ...DEFAULT_LEASE_EVIDENCE_PARAMS
+    ...DEFAULT_SALES_EVIDENCE_PARAMS
 }
 
 export enum SaleTypeEnum {
@@ -79,8 +52,8 @@ export enum SaleTypeEnum {
 }
 
 export type MinMaxDateType = {
-  min: Date
-  max: Date
+  min: Date | undefined
+  max: Date | undefined
 }
 
 export type MinMaxNumberType = {
@@ -94,15 +67,6 @@ export type SalesEvidenceFilterParams = {
   dateSold: MinMaxDateType
   salePrice: MinMaxNumberType
   saleType: SaleTypeEnum[]
-}
-
-export type LeaseEvidenceFilterParams = {
-  landArea: MinMaxNumberType
-  buildArea: MinMaxNumberType
-  rentGross: MinMaxNumberType
-  rentDollarMeter: MinMaxNumberType
-  leasedDate: MinMaxDateType
-  reviewDate: MinMaxDateType
 }
 
 export type PositionType = {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './index.css'
-import { SearchWidgetWrapper } from './components/SearchWidgets'
+import { SearchWidgetsWrapper } from './components/SearchWidgetsWrapper'
 import { findMatchingRecords, getGoogleMapsAPIKeyFromCRM, getSearchAddressPosition } from './services/crmDataService'
 import { MapWidget } from './components/MapWidget'
 import { ResultsTableWidget } from './components/ResultsTable'
@@ -90,7 +90,7 @@ function App () {
         if (isReadyForSearch) {
             const getDataFromCrm = async () => {
                 setLoading(true)
-                const { matchedProperties, uniqueSearchRecords } = await findMatchingRecords(searchParameters, 'Properties')
+                const { matchedProperties, uniqueSearchRecords } = await findMatchingRecords(searchParameters, filterInUse)
                 const searchAddressPosition = await getSearchAddressPosition(searchParameters)
                 setSearchAddressPosition(searchAddressPosition)
                 setUniqueSearchRecords(uniqueSearchRecords.length)
@@ -101,7 +101,7 @@ function App () {
 
             void getDataFromCrm()
         }
-    }, [searchParameters, isReadyForSearch])
+    }, [searchParameters, isReadyForSearch, filterInUse])
 
     useEffect(() => {
         const getMapsAPIKeyFromCRM = async () => {
@@ -114,7 +114,7 @@ function App () {
 
     return (
         <div className="App">
-            <SearchWidgetWrapper changeSearchParameters={changeSearchParameters} searchParameters={searchParameters} setReadyForSearch={setReadyForSearch} setFilterInUse={setFilterInUse} filterInUse={filterInUse}/>
+            <SearchWidgetsWrapper changeSearchParameters={changeSearchParameters} searchParameters={searchParameters} setReadyForSearch={setReadyForSearch} setFilterInUse={setFilterInUse} filterInUse={filterInUse}/>
             {isLoading &&
                 <div style={{ padding: '20px' }}>
                     Loading ... estimated waiting time 20 seconds.

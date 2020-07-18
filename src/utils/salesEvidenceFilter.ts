@@ -16,9 +16,12 @@ function formatDateToString (date: Date): string {
 }
 
 function dateFilter (property: UnprocessedResultsFromCRM, dateSold: MinMaxDateType): boolean {
-    const minDate = formatDateToString(dateSold.min)
-    const maxDate = formatDateToString(dateSold.max)
-    return typeof property.Sale_Date === 'string' && property.Sale_Date >= minDate && property.Sale_Date <= maxDate
+    if (typeof dateSold.min !== 'undefined' && typeof dateSold.max !== 'undefined') {
+        const minDate = formatDateToString(dateSold.min)
+        const maxDate = formatDateToString(dateSold.max)
+        return typeof property.Sale_Date === 'string' && property.Sale_Date >= minDate && property.Sale_Date <= maxDate
+    }
+    return false
 }
 
 function saleTypeFilter (property: UnprocessedResultsFromCRM, saleTypes: SaleTypeEnum[]): boolean {
