@@ -1,12 +1,13 @@
 import { SalesEvidenceFilterParams, SaleTypeEnum, UnprocessedResultsFromCRM, MinMaxNumberType, MinMaxDateType } from '../types'
 
-function genericFilter (property: UnprocessedResultsFromCRM, filterType: string, filterValues: MinMaxNumberType) {
+function numberFilter (property: UnprocessedResultsFromCRM, filterType: string, filterValues: MinMaxNumberType) {
     return typeof property[filterType] === 'number' && property[filterType] >= filterValues.min && property[filterType] <= filterValues.max
 }
 
 function formatDateToString (date: Date): string {
     const dateYear = date.getFullYear()
-    let dateMonth: string | number = date.getMonth() + 1
+    const monthValuesStartAtOne = 1
+    let dateMonth: string | number = date.getMonth() + monthValuesStartAtOne
     let dateDate: string | number = date.getDate()
     const numberToLeftPadZero = 9
     if (dateMonth <= numberToLeftPadZero) dateMonth = `0${dateMonth}`
@@ -36,13 +37,13 @@ export default function salesEvidenceFilter (property: UnprocessedResultsFromCRM
     } = filterParameters[0]
     const FILTER_NOT_USED_NUM_TYPE = -1
     const isLandAreaFilterInUse = landArea.min === FILTER_NOT_USED_NUM_TYPE && landArea.max === FILTER_NOT_USED_NUM_TYPE
-    const isInLandAreaRange = !isLandAreaFilterInUse && genericFilter(property, 'Land_Area_sqm', landArea)
+    const isInLandAreaRange = !isLandAreaFilterInUse && numberFilter(property, 'Land_Area_sqm', landArea)
 
     const isBuildAreaFilterInUse = buildArea.min === FILTER_NOT_USED_NUM_TYPE && buildArea.max === FILTER_NOT_USED_NUM_TYPE
-    const isInBuildAreaRange = !isBuildAreaFilterInUse && genericFilter(property, 'Build_Area_sqm', buildArea)
+    const isInBuildAreaRange = !isBuildAreaFilterInUse && numberFilter(property, 'Build_Area_sqm', buildArea)
 
     const isSalePriceFilterInUse = salePrice.min === FILTER_NOT_USED_NUM_TYPE && salePrice.max === FILTER_NOT_USED_NUM_TYPE
-    const isInSalePriceRange = !isSalePriceFilterInUse && genericFilter(property, 'Sale_Price', salePrice)
+    const isInSalePriceRange = !isSalePriceFilterInUse && numberFilter(property, 'Sale_Price', salePrice)
 
     const FILTER_NOT_USED_ARR_TYPE = 0
     const isSaleTypeFilterInUse = saleType.length === FILTER_NOT_USED_ARR_TYPE
