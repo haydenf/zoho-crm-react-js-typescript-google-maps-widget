@@ -55,6 +55,9 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
     const uniqueSearchRecords: string[] = []
 
     unsortedPropertyResults.forEach((property: UnprocessedResultsFromCRM) => {
+        if (!property.Latitude || !property.Longitude) {
+            return
+        }
         const isUnderNeighbourLimit = matchTallies.neighbour < maxNumNeighbours
         const isUnderPropertyTypeLimit = matchTallies.propertyType < maxResultsForPropertyTypes
         const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
