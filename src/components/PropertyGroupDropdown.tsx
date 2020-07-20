@@ -22,7 +22,7 @@ export function PropertyGroupDropdown (props: DropdownProps) {
                 id="propertyGroup"
                 isMulti
                 onChange={(newPropertyGroups: ReactSelectOption[]) => {
-                    const propertyGroupValues = newPropertyGroups?.map((option: ReactSelectOption) => option.value) || ['All']
+                    const propertyGroupValues = newPropertyGroups?.map((option: ReactSelectOption) => option.value) || []
                     props.changePropertyGroups(propertyGroupValues)
                 }}
                 placeholder={''}
