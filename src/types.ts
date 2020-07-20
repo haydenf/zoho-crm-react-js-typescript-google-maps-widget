@@ -7,7 +7,7 @@ export type BaseSearchParamsType = {
   neighboursSearchMaxRecords: number
   propertyGroupsMaxResults: number
   propertyTypesMaxResults: number
-  managed: string[]
+  managed: string
   id: string
 }
 
@@ -38,7 +38,7 @@ export const DEFAULT_SEARCH_PARAMS = {
     neighboursSearchMaxRecords: Infinity,
     propertyTypes: ['All'],
     propertyGroups: ['All'],
-    managed: ['All'],
+    managed: 'All',
     readyForSearch: false,
     id: `search:${(Math.random() * 1000)}`,
     ...DEFAULT_SALES_EVIDENCE_PARAMS

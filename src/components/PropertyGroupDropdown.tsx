@@ -25,7 +25,7 @@ export function PropertyGroupDropdown (props: DropdownProps) {
                     const propertyGroupValues = newPropertyGroups?.map((option: ReactSelectOption) => option.value) || ['All']
                     props.changePropertyGroups(propertyGroupValues)
                 }}
-                placeholder={'All'}
+                placeholder={''}
                 tabIndex={3}
                 options={possiblePropertyGroups}
             />

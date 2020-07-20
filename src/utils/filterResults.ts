@@ -44,7 +44,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
     const maxResultsForPropertyGroups = searchParameters[0].propertyGroupsMaxResults
     const desiredPropertyTypes = searchParameters[0].propertyTypes
     const desiredPropertyGroups = searchParameters[0].propertyGroups
-    const managed = searchParameters[0].managed[0]
+    const managed = searchParameters[0].managed
 
     const matchTallies: MatchTallies = {
         neighbour: 0,
@@ -53,8 +53,12 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
     }
     const matchedProperties: UnprocessedResultsFromCRM[] = []
     const uniqueSearchRecords: string[] = []
+    const lengthOfUnprocessedResults = unsortedPropertyResults.length
+    console.log('lengthOfUnprocessedResults', lengthOfUnprocessedResults)
 
-    unsortedPropertyResults.forEach((property: UnprocessedResultsFromCRM) => {
+    unsortedPropertyResults.forEach((property: UnprocessedResultsFromCRM, index: number) => {
+        console.log('matchTallies', matchTallies)
+
         if (!property.Latitude || !property.Longitude) {
             return
         }
@@ -62,14 +66,15 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         const isUnderPropertyTypeLimit = matchTallies.propertyType < maxResultsForPropertyTypes
         const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
         let canAddAnotherProperty = isUnderNeighbourLimit || isUnderPropertyTypeLimit || isUnderPropertyGroupLimit
+        console.log('isUnderPropertyGroupLimit, isUnderPropertyTypeLimit, isUnderNeighbourLimit', isUnderPropertyGroupLimit, isUnderPropertyTypeLimit, isUnderNeighbourLimit)
 
         if (filterInUse === 'SalesEvidenceFilter') {
             canAddAnotherProperty = canAddAnotherProperty && salesEvidenceFilter(property, searchParameters)
         }
 
         if (canAddAnotherProperty) {
-            const propertyTypeMatch = isUnderPropertyTypeLimit && matchForPropertyTypes(property, desiredPropertyTypes)
-            const propertyGroupMatch = isUnderPropertyGroupLimit && matchForPropertyGroups(property, desiredPropertyGroups)
+            const propertyTypeMatch = desiredPropertyTypes.length !== 0 && isUnderPropertyTypeLimit && matchForPropertyTypes(property, desiredPropertyTypes)
+            const propertyGroupMatch = desiredPropertyGroups.length !== 0 && isUnderPropertyGroupLimit && matchForPropertyGroups(property, desiredPropertyGroups)
 
             const ownerData = getOwnerData(property)
             const canAddBasedOnFilters = propertyGroupMatch || propertyTypeMatch
@@ -81,19 +86,26 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                 }
                 if (propertyTypeMatch) {
                     matchTallies.propertyType += 1
-                } else if (!propertyTypeMatch && propertyGroupMatch) {
+                }
+                if (propertyGroupMatch) {
                     matchTallies.propertyGroup += 1
                 }
-                if (!canAddBasedOnFilters && isUnderNeighbourLimit) {
+                if (canAddBasedOnFilters && isUnderNeighbourLimit) {
                     matchTallies.neighbour += 1
+                    matchedProperties.push(property)
+                    const isDupeId = uniqueSearchRecords.includes(property.id)
+                    if (!isDupeId) {
+                        uniqueSearchRecords.push(property.id)
+                    }
+                }
+                console.log('index', index)
+
+                if (lengthOfUnprocessedResults - 1 === index) {
+                    console.log('testing inside length')
+
+                    matchTallies.neighbour = matchTallies.propertyGroup || matchTallies.propertyType
                 }
                 property.owner_details = ownerData
-                matchedProperties.push(property)
-
-                const isDupeId = uniqueSearchRecords.includes(property.id)
-                if (!isDupeId) {
-                    uniqueSearchRecords.push(property.id)
-                }
             }
         }
     })

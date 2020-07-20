@@ -36,7 +36,7 @@ export function PropertyTypeDropdown (props: DropdownProps) {
                     props.changePropertyTypes(propertyTypeValues)
                 }}
                 tabIndex={2}
-                placeholder={'All'}
+                placeholder={''}
                 options={possiblePropertyTypes}
             />
         </label>
