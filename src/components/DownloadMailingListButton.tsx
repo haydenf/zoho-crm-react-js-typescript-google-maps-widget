@@ -31,19 +31,18 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
             postalAddress = contact.Postal_Address
             email = contact.Email
         }
-
         if (!doNotMail || !returnToSender || !email) {
             const checker = null || undefined
             if (propertyAddress !== checker && postalAddress !== checker) {
                 owner = owner ? (contact.Postal_Address ? contact : owner) : contact
-                const lastMailed = owner?.Last_Mailed || 'Last mailed has not been found'
+                const lastMailed = owner?.Last_Mailed || contact?.Last_Mailed || 'Last mailed has not been found'
                 csvRow = `"${owner?.Name}","${owner?.Contact_Type}","${postalAddress}","${owner?.Postal_Suburb}","${owner?.Postal_State}","${owner?.Postal_Postcode}","${propertyAddress}, ${lastMailed}\r\n`
                 csvRow = csvRow.replace(/null/g, '-')
             }
         }
         return csvRow
     }
-    const HEADER_ROW = '"Contact Name","Contact Type","Mailing Street Address","Mailing Suburb","Mailing State","Mailing Postcode","Property Address","Property Type (Marketing)","Company"\r\n'
+    const HEADER_ROW = '"Contact Name","Contact Type","Mailing Street Address","Mailing Suburb","Mailing State","Mailing Postcode","Property Address","Property Type (Marketing)","Company", "Last Mailed"\r\n'
     const csvRows = dedupedProperties.map(generateCSVRow).join('')
     const csvData = `${HEADER_ROW}${csvRows}`
     const resultsBlob = new Blob(

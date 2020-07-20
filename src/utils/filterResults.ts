@@ -55,6 +55,9 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
     const uniqueSearchRecords: string[] = []
 
     unsortedPropertyResults.forEach((property: UnprocessedResultsFromCRM) => {
+        if (!property.Latitude || !property.Longitude) {
+            return
+        }
         const isUnderNeighbourLimit = matchTallies.neighbour < maxNumNeighbours
         const isUnderPropertyTypeLimit = matchTallies.propertyType < maxResultsForPropertyTypes
         const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
@@ -87,21 +90,10 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                 property.owner_details = ownerData
                 matchedProperties.push(property)
 
-                let isDupeId = uniqueSearchRecords.includes(property.id)
+                const isDupeId = uniqueSearchRecords.includes(property.id)
                 if (!isDupeId) {
                     uniqueSearchRecords.push(property.id)
                 }
-                if (propertyTypeMatch) {
-                    matchTallies.propertyType += 1
-                } else if (!propertyTypeMatch && propertyGroupMatch) {
-                    matchTallies.propertyGroup += 1
-                }
-                if (!canAddBasedOnFilters && maxNumNeighbours) matchTallies.neighbour += 1
-                property.owner_details = ownerData
-                matchedProperties.push(property)
-
-                isDupeId = uniqueSearchRecords.includes(property.id)
-                if (!isDupeId) uniqueSearchRecords.push(property.id)
             }
         }
     })
