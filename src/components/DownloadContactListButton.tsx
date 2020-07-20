@@ -8,22 +8,27 @@ type DownloadButtonProps = {
 }
 
 export function DownloadContactListButton (props: DownloadButtonProps) {
-    const csvHeader = '"Property Address","Property Type (Marketing)","Owner","Owner Mobile","Owner Phone","Contact","Contact Mobile","Contact Work Phone"\r\n'
+    const csvHeader = '"Property Address","Name","Owner/Contact","Mobile","Work Phone"\r\n'
     const arrayOfPropertyObjects = props.results
 
-    const uniqueProperties = getUniqueListBy(arrayOfPropertyObjects, 'Deal_Name')
+    const uniqueProperties = getUniqueListBy(arrayOfPropertyObjects, 'id')
     const csvRows = uniqueProperties.map((result: UnprocessedResultsFromCRM) => {
         if (result.owner_details && Array.isArray(result.owner_details)) {
+            let type = 'unknown'
             const mobileNumbers = result.owner_details.map((owner: OwnerType) => owner.Mobile).filter((Mobile: string) => Mobile)
             const mobile = mobileNumbers.length > 0 ? mobileNumbers[0] : null
             const workPhones = result.owner_details.map((owner: OwnerType) => owner.Work_Phone).filter((Work_Phone: string) => Work_Phone)
             const workPhone = workPhones.length > 0 ? workPhones[0] : null
             const propertyAddress = result.Deal_Name
-            const propertyTypeMarketing = result.Property_Category_Mailing
             const ownerData = result.owner_details.find((owner: OwnerType) => owner.Contact_Type === 'Owner')
             const contactData = result.owner_details.find((owner: OwnerType) => owner.Contact_Type === 'Director')
+            if (ownerData) {
+                type = 'Owner'
+            } else if (contactData) {
+                type = 'Contact'
+            }
             if (mobile || workPhone) {
-                const newRow = `"${propertyAddress}","${ownerData?.Name || ''}","${propertyTypeMarketing}","${ownerData?.Mobile || ''}","${ownerData?.Work_Phone || ''}","${contactData?.Name || ''}","${contactData?.Mobile || ''}","${contactData?.Work_Phone || ''}"\r\n`
+                const newRow = `"${propertyAddress}","${ownerData?.Name || contactData?.Name || ''}","${type || ''}" "${ownerData?.Mobile || contactData?.Mobile || ''}","${ownerData?.Work_Phone || contactData?.Work_Phone || ''}"\r\n`
                 return newRow.replace(/null/g, '-')
             }
         }
