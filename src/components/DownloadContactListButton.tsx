@@ -12,23 +12,27 @@ export function DownloadContactListButton (props: DownloadButtonProps) {
     const arrayOfPropertyObjects = props.results
 
     const uniqueProperties = getUniqueListBy(arrayOfPropertyObjects, 'id')
+    console.log(uniqueProperties)
+    let type = 'unknown'
     const csvRows = uniqueProperties.map((result: UnprocessedResultsFromCRM) => {
         if (result.owner_details && Array.isArray(result.owner_details)) {
-            let type = 'unknown'
+
             const mobileNumbers = result.owner_details.map((owner: OwnerType) => owner.Mobile).filter((Mobile: string) => Mobile)
             const mobile = mobileNumbers.length > 0 ? mobileNumbers[0] : null
             const workPhones = result.owner_details.map((owner: OwnerType) => owner.Work_Phone).filter((Work_Phone: string) => Work_Phone)
             const workPhone = workPhones.length > 0 ? workPhones[0] : null
             const propertyAddress = result.Deal_Name
-            const ownerData = result.owner_details.find((owner: OwnerType) => owner.Contact_Type === 'Owner')
-            const contactData = result.owner_details.find((owner: OwnerType) => owner.Contact_Type === 'Director')
-            if (ownerData) {
+            const ownerDetails = result.owner_details
+            const contact: OwnerType = ownerDetails[0]
+            const owner: OwnerType = ownerDetails[1]
+
+            if (owner) {
                 type = 'Owner'
-            } else if (contactData) {
+            } else if (contact) {
                 type = 'Contact'
             }
             if (mobile || workPhone) {
-                const newRow = `"${propertyAddress}","${ownerData?.Name || contactData?.Name || ''}","${type || ''}" "${ownerData?.Mobile || contactData?.Mobile || ''}","${ownerData?.Work_Phone || contactData?.Work_Phone || ''}"\r\n`
+                const newRow = `"${propertyAddress}","${owner?.Name || contact?.Name || ''}","${type || ''}" "${owner?.Mobile || contact?.Mobile || ''}","${owner?.Work_Phone || contact?.Work_Phone || ''}"\r\n`
                 return newRow.replace(/null/g, '-')
             }
         }
