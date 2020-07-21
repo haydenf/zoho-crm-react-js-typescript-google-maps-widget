@@ -1,6 +1,5 @@
 import React from 'react'
 import { UnprocessedResultsFromCRM, OwnerType } from '../types'
-import getUniqueListBy from '../utils/getUniqueListBy'
 
 type DownloadButtonProps = {
     results: UnprocessedResultsFromCRM[]
@@ -8,7 +7,6 @@ type DownloadButtonProps = {
 export function DownloadMailingListButton (props: DownloadButtonProps) {
     let downloadUrl = null
     const matchingPropertiesAndOwners = props.results
-    const dedupedProperties = getUniqueListBy(matchingPropertiesAndOwners, 'id')
     function generateCSVRow (propertyObject: UnprocessedResultsFromCRM) {
         let csvRow = ''
         let doNotMail
@@ -18,7 +16,7 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
         const propertyAddress = propertyObject.Deal_Name
         const ownerDetails = propertyObject.owner_details
         const contact: OwnerType = ownerDetails[0]
-        let owner: OwnerType = ownerDetails[1]
+        const owner: OwnerType = ownerDetails[1]
 
         if (!contact && owner) {
             doNotMail = owner.Do_Not_Mail
@@ -34,16 +32,23 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
         if (!doNotMail || !returnToSender || !email) {
             const checker = null || undefined
             if (propertyAddress !== checker && postalAddress !== checker) {
-                owner = owner ? (contact.Postal_Address ? contact : owner) : contact
-                const lastMailed = owner?.Last_Mailed || contact?.Last_Mailed || 'Last mailed has not been found'
-                csvRow = `"${owner?.Name}","${owner?.Contact_Type}","${postalAddress}","${owner?.Postal_Suburb}","${owner?.Postal_State}","${owner?.Postal_Postcode}","${propertyAddress}, ${lastMailed}\r\n`
-                csvRow = csvRow.replace(/null/g, '-')
+                const ownerOrContact = owner ? (contact.Postal_Address ? contact : owner) : contact
+                const ownerContactDupeRemoval = []
+                ownerContactDupeRemoval.push(`${ownerOrContact.Postal_Address}-${ownerOrContact.Name}`)
+                console.log(ownerContactDupeRemoval)
+                const isDupe = ownerContactDupeRemoval.includes(`${ownerOrContact.Postal_Address}-${ownerOrContact.Name}`)
+                if (!isDupe) {
+                    console.log(isDupe)
+                    const lastMailed = owner?.Last_Mailed || contact?.Last_Mailed || 'Last mailed has not been found'
+                    csvRow = `"${ownerOrContact?.Name}","${ownerOrContact?.Contact_Type}","${postalAddress}","${ownerOrContact?.Postal_Suburb}","${ownerOrContact?.Postal_State}","${ownerOrContact?.Postal_Postcode}","${propertyAddress}, ${lastMailed}\r\n`
+                    csvRow = csvRow.replace(/null/g, '-')
+                }
             }
         }
         return csvRow
     }
     const HEADER_ROW = '"Contact Name","Contact Type","Mailing Street Address","Mailing Suburb","Mailing State","Mailing Postcode","Property Address","Property Type (Marketing)","Company", "Last Mailed"\r\n'
-    const csvRows = dedupedProperties.map(generateCSVRow).join('')
+    const csvRows = matchingPropertiesAndOwners.map(generateCSVRow).join('')
     const csvData = `${HEADER_ROW}${csvRows}`
     const resultsBlob = new Blob(
         [csvData],
