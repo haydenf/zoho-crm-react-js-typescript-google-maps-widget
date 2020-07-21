@@ -12,11 +12,9 @@ export function DownloadContactListButton (props: DownloadButtonProps) {
     const arrayOfPropertyObjects = props.results
 
     const uniqueProperties = getUniqueListBy(arrayOfPropertyObjects, 'id')
-    console.log(uniqueProperties)
     let type = 'unknown'
     const csvRows = uniqueProperties.map((result: UnprocessedResultsFromCRM) => {
         if (result.owner_details && Array.isArray(result.owner_details)) {
-
             const mobileNumbers = result.owner_details.map((owner: OwnerType) => owner.Mobile).filter((Mobile: string) => Mobile)
             const mobile = mobileNumbers.length > 0 ? mobileNumbers[0] : null
             const workPhones = result.owner_details.map((owner: OwnerType) => owner.Work_Phone).filter((Work_Phone: string) => Work_Phone)
