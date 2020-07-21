@@ -26,7 +26,7 @@ export default function salesEvidenceFilter (property: UnprocessedResultsFromCRM
         salePrice,
         saleType,
         dateSold
-    } = filterParameters
+    } = filterParameters[0]
     const BLANK_FILTER_VALUE = -1
     const isLandAreaFilterInUse = landArea.min === BLANK_FILTER_VALUE && landArea.max === BLANK_FILTER_VALUE
     const isInLandAreaRange = !isLandAreaFilterInUse && numberFilter(property, 'Land_Area_sqm', landArea)
