@@ -49,6 +49,10 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
 
     let maxResultsForPropertyTypes: number
     let maxResultsForPropertyGroups: number
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 4f0382ea808cd54246a6d65554d905559fdd6b49
     if (!isPropertyTypeFilterInUse && isPropertyGroupFilterInUse) {
         maxResultsForPropertyTypes = 0
         maxResultsForPropertyGroups = searchParameters[0].propertyGroupsMaxResults
@@ -86,7 +90,6 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         const isUnderPropertyTypeLimit = matchTallies.propertyType < maxResultsForPropertyTypes
         const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
         let canAddAnotherProperty = isUnderNeighbourLimit || isUnderPropertyTypeLimit || isUnderPropertyGroupLimit
-
         if (filterInUse === 'SalesEvidenceFilter') {
             canAddAnotherProperty = canAddAnotherProperty && salesEvidenceFilter(property, searchParameters[0])
         }
@@ -99,7 +102,6 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             const canAddBasedOnFilters = propertyGroupMatch || propertyTypeMatch
             const isManaged = (property.Managed === managed) || managed === 'All'
             const shouldAddProperty = isManaged && (canAddBasedOnFilters || isUnderNeighbourLimit)
-
             if (shouldAddProperty) {
                 if (ownerData.length > 0) {
                     property.owner_details = ownerData
