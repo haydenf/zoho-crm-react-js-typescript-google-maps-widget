@@ -30,15 +30,15 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
             email = contact.Email
         }
         if (!doNotMail || !returnToSender || !email) {
-            const checker = null || undefined
-            if (propertyAddress !== checker && postalAddress !== checker) {
+            // const checker = null || undefined
+            if (propertyAddress && postalAddress) {
                 const ownerOrContact = owner ? (contact.Postal_Address ? contact : owner) : contact
                 const ownerContactDupeRemoval = []
                 ownerContactDupeRemoval.push(`${ownerOrContact.Postal_Address}-${ownerOrContact.Name}`)
                 const isDupe = ownerContactDupeRemoval.includes(`${ownerOrContact.Postal_Address}-${ownerOrContact.Name}`)
                 if (isDupe) {
                     const lastMailed = owner?.Last_Mailed || contact?.Last_Mailed || 'Last mailed has not been found'
-                    csvRow = `"${ownerOrContact?.Name}","${ownerOrContact?.Contact_Type}","${postalAddress}","${ownerOrContact?.Postal_Suburb}","${ownerOrContact?.Postal_State}","${ownerOrContact?.Postal_Postcode}","${propertyAddress}", "${lastMailed}"\r\n`
+                    csvRow = `"${ownerOrContact?.Name}","${ownerOrContact?.Contact_Type}","${ownerOrContact?.Postal_Suburb}","${ownerOrContact?.Postal_State}","${ownerOrContact?.Postal_Postcode}","${propertyAddress}", "${lastMailed}"\r\n`
                     csvRow = csvRow.replace(/null/g, '-')
                 }
             }

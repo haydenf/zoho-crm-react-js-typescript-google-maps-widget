@@ -60,19 +60,14 @@ export function ResultsTableWidget (props: ResultsTableProps) {
                          </thead>
                          <tbody>
                              {props.results.map((result, index) => {
-                                 const propertyAddress = result.Deal_Name
-                                 const landArea = result.Land_Area_sqm
-                                 const buildArea = result.Build_Area_sqm
-                                 const dateSold = result.Sale_Date
-                                 const salePrice = result.Sale_Price
                                  return (
                                      <tr key={`${result.id}-${index}`}>
                                          <td>{index + 1}</td>
-                                         <td>{propertyAddress}</td>
-                                         <td>{landArea}</td>
-                                         <td>{buildArea}</td>
-                                         <td>{dateSold}</td>
-                                         <td>{salePrice}</td>
+                                         <td>{result.propertyAddress}</td>
+                                         <td>{result.landArea}</td>
+                                         <td>{result.buildArea}</td>
+                                         <td>{result.dateSold}</td>
+                                         <td>{result.salePrice}</td>
                                      </tr>
                                  )
                              })}
