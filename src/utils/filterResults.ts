@@ -49,6 +49,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
 
     let maxResultsForPropertyTypes: number
     let maxResultsForPropertyGroups: number
+
     if (!isPropertyTypeFilterInUse && isPropertyGroupFilterInUse) {
         maxResultsForPropertyTypes = 0
         maxResultsForPropertyGroups = searchParameters[0].propertyGroupsMaxResults
@@ -76,7 +77,6 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
     }
     const matchedProperties: UnprocessedResultsFromCRM[] = []
     const uniqueSearchRecords: string[] = []
-    const lengthOfUnprocessedResults = unsortedPropertyResults.length
 
     unsortedPropertyResults.forEach((property: UnprocessedResultsFromCRM) => {
         if (!property.Latitude || !property.Longitude) {
@@ -86,9 +86,9 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         const isUnderPropertyTypeLimit = matchTallies.propertyType < maxResultsForPropertyTypes
         const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
         let canAddAnotherProperty = isUnderNeighbourLimit || isUnderPropertyTypeLimit || isUnderPropertyGroupLimit
-
         if (filterInUse === 'SalesEvidenceFilter') {
-            canAddAnotherProperty = canAddAnotherProperty && salesEvidenceFilter(property, searchParameters)
+            // N.B. the Sales Evidence Filter doesn't have the ability to search for multiple properties hence only passing in the single search param object.
+            canAddAnotherProperty = canAddAnotherProperty && salesEvidenceFilter(property, searchParameters[0])
         }
 
         if (canAddAnotherProperty) {
@@ -99,33 +99,28 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             const canAddBasedOnFilters = propertyGroupMatch || propertyTypeMatch
             const isManaged = (property.Managed === managed) || managed === 'All'
             const shouldAddProperty = isManaged && (canAddBasedOnFilters || isUnderNeighbourLimit)
-
             if (shouldAddProperty) {
                 if (ownerData.length > 0) {
                     property.owner_details = ownerData
-                }
-                if (propertyTypeMatch) {
-                    matchTallies.propertyType += 1
-                }
-                if (propertyGroupMatch) {
-                    matchTallies.propertyGroup += 1
-                }
-                if (canAddBasedOnFilters && isUnderNeighbourLimit) {
-                    matchTallies.neighbour += 1
+                    if (propertyTypeMatch) {
+                        matchTallies.propertyType += 1
+                    }
+                    if (propertyGroupMatch) {
+                        matchTallies.propertyGroup += 1
+                    }
+                    if (canAddBasedOnFilters && isUnderNeighbourLimit) {
+                        matchTallies.neighbour += 1
 
-                    const isDupeId = uniqueSearchRecords.includes(property.id)
-                    if (!isDupeId) {
+                        const isDupeId = uniqueSearchRecords.includes(property.id)
+                        if (!isDupeId) {
                         // N. B. This is to remove dupes retrieved during the getPageOfRecords function.
-                        uniqueSearchRecords.push(property.id)
-                        matchedProperties.push(property)
+                            uniqueSearchRecords.push(property.id)
+                            matchedProperties.push(property)
+                        }
                     }
                 }
-                // may need to remove this
-                property.owner_details = ownerData
             }
         }
     })
-    console.log('matchedProperties', lengthOfUnprocessedResults, matchedProperties.length, uniqueSearchRecords.length, matchTallies)
-
     return { matchedProperties, uniqueSearchRecords }
 }
