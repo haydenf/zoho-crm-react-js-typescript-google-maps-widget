@@ -122,6 +122,5 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             }
         }
     })
-
     return { matchedProperties, uniqueSearchRecords }
 }
