@@ -41,16 +41,14 @@ function getOwnerData (property: UnprocessedResultsFromCRM) {
 export default function filterResults (unsortedPropertyResults: UnprocessedResultsFromCRM[], searchParameters: IntersectedSearchAndFilterParams[], filterInUse: string): { matchedProperties: UnprocessedResultsFromCRM[], uniqueSearchRecords: string[] } {
     let desiredPropertyTypes = searchParameters[0].propertyTypes
     let desiredPropertyGroups = searchParameters[0].propertyGroups
-    const managed = searchParameters[0].managed
-    const isPropertyTypeFilterInUse = desiredPropertyTypes.length !== 0
-    const isPropertyGroupFilterInUse = desiredPropertyGroups.length !== 0
+    let isPropertyTypeFilterInUse = desiredPropertyTypes.length !== 0
+    let isPropertyGroupFilterInUse = desiredPropertyGroups.length !== 0
 
+    const managed = searchParameters[0].managed
     const maxNumNeighbours = searchParameters[0].neighboursSearchMaxRecords
-    // Default - Infinity
+
     let maxResultsForPropertyTypes: number
     let maxResultsForPropertyGroups: number
-    console.log('isPropertyTypeFilterInUse && isPropertyGroupFilterInUse', isPropertyTypeFilterInUse, desiredPropertyTypes, isPropertyGroupFilterInUse, desiredPropertyGroups)
-
     if (!isPropertyTypeFilterInUse && isPropertyGroupFilterInUse) {
         maxResultsForPropertyTypes = 0
         maxResultsForPropertyGroups = searchParameters[0].propertyGroupsMaxResults
@@ -59,13 +57,17 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         maxResultsForPropertyTypes = searchParameters[0].propertyTypesMaxResults
     } else {
         maxResultsForPropertyTypes = searchParameters[0].propertyTypesMaxResults
-        desiredPropertyTypes = ['All']
         maxResultsForPropertyGroups = searchParameters[0].propertyGroupsMaxResults
-        desiredPropertyGroups = ['All']
-        console.log('desiredPropertyGroups', desiredPropertyGroups, desiredPropertyTypes)
+        if (!isPropertyGroupFilterInUse || !isPropertyTypeFilterInUse) {
+            desiredPropertyGroups = ['All']
+            desiredPropertyTypes = ['All']
+        } else {
+            desiredPropertyTypes = searchParameters[0].propertyTypes
+            desiredPropertyGroups = searchParameters[0].propertyGroups
+        }
+        isPropertyGroupFilterInUse = true
+        isPropertyTypeFilterInUse = true
     }
-
-    // const maxResultsForPropertyGroups = searchParameters[0].propertyGroupsMaxResults
 
     const matchTallies: MatchTallies = {
         neighbour: 0,
@@ -75,7 +77,6 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
     const matchedProperties: UnprocessedResultsFromCRM[] = []
     const uniqueSearchRecords: string[] = []
     const lengthOfUnprocessedResults = unsortedPropertyResults.length
-    console.log('lengthOfUnprocessedResults', lengthOfUnprocessedResults, managed)
 
     unsortedPropertyResults.forEach((property: UnprocessedResultsFromCRM) => {
         if (!property.Latitude || !property.Longitude) {
@@ -85,7 +86,6 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         const isUnderPropertyTypeLimit = matchTallies.propertyType < maxResultsForPropertyTypes
         const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
         let canAddAnotherProperty = isUnderNeighbourLimit || isUnderPropertyTypeLimit || isUnderPropertyGroupLimit
-        console.log('isUnderPropertyGroupLimit, isUnderPropertyTypeLimit, isUnderNeighbourLimit', isUnderPropertyGroupLimit, isUnderPropertyTypeLimit, isUnderNeighbourLimit)
 
         if (filterInUse === 'SalesEvidenceFilter') {
             canAddAnotherProperty = canAddAnotherProperty && salesEvidenceFilter(property, searchParameters[0])
@@ -99,7 +99,6 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             const canAddBasedOnFilters = propertyGroupMatch || propertyTypeMatch
             const isManaged = (property.Managed === managed) || managed === 'All'
             const shouldAddProperty = isManaged && (canAddBasedOnFilters || isUnderNeighbourLimit)
-            console.log('property.Managed === managed', property.Managed === managed, property.Managed)
 
             if (shouldAddProperty) {
                 if (ownerData.length > 0) {
@@ -113,7 +112,6 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                 }
                 if (canAddBasedOnFilters && isUnderNeighbourLimit) {
                     matchTallies.neighbour += 1
-                    console.log('property.Property_Type_Portals', property.Property_Type_Portals)
 
                     const isDupeId = uniqueSearchRecords.includes(property.id)
                     if (!isDupeId) {

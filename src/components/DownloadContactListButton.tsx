@@ -30,7 +30,7 @@ export function DownloadContactListButton (props: DownloadButtonProps) {
                 type = 'Contact'
             }
             if (mobile || workPhone) {
-                const newRow = `"${propertyAddress}","${owner?.Name || contact?.Name || ''}","${type || ''}" "${owner?.Mobile || contact?.Mobile || ''}","${owner?.Work_Phone || contact?.Work_Phone || ''}"\r\n`
+                const newRow = `"${propertyAddress}","${owner?.Name || contact?.Name || ''}","${type || ''}","${owner?.Mobile || contact?.Mobile || ''}","${owner?.Work_Phone || contact?.Work_Phone || ''}"\r\n`
                 return newRow.replace(/null/g, '-')
             }
         }
