@@ -49,6 +49,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
 
     let maxResultsForPropertyTypes: number
     let maxResultsForPropertyGroups: number
+
     if (!isPropertyTypeFilterInUse && isPropertyGroupFilterInUse) {
         maxResultsForPropertyTypes = 0
         maxResultsForPropertyGroups = searchParameters[0].propertyGroupsMaxResults
