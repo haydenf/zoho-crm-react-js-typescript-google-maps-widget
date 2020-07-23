@@ -7,6 +7,7 @@ type DownloadButtonProps = {
 export function DownloadMailingListButton (props: DownloadButtonProps) {
     let downloadUrl = null
     const matchingPropertiesAndOwners = props.results
+    const ownerContactDupeRemoval: string[] = []
     function generateCSVRow (propertyObject: UnprocessedResultsFromCRM) {
         let csvRow = ''
         let doNotMail
@@ -15,30 +16,31 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
         let email
         const propertyAddress = propertyObject.Deal_Name
         const ownerDetails = propertyObject.owner_details
-        const contact: OwnerType = ownerDetails[0]
+        const relatedContact: OwnerType = ownerDetails[0]
         const owner: OwnerType = ownerDetails[1]
 
-        if (!contact && owner) {
+        let ownerOrRelatedContact: OwnerType = owner
+        if (!relatedContact && owner) {
             doNotMail = owner.Do_Not_Mail
             returnToSender = owner.Return_to_Sender
             postalAddress = owner.Postal_Address
             email = owner.Email
-        } else if (contact) {
-            doNotMail = contact.Do_Not_Mail
-            returnToSender = contact.Return_to_Sender
-            postalAddress = contact.Postal_Address
-            email = contact.Email
+            ownerOrRelatedContact = owner
+        } else if (relatedContact) {
+            doNotMail = relatedContact.Do_Not_Mail
+            returnToSender = relatedContact.Return_to_Sender
+            postalAddress = relatedContact.Postal_Address
+            email = relatedContact.Email
+            ownerOrRelatedContact = relatedContact
         }
+
+        const isDupe = ownerContactDupeRemoval.includes(`${ownerOrRelatedContact.Postal_Address}-${ownerOrRelatedContact.Name}`)
         if (!doNotMail || !returnToSender || !email) {
-            // const checker = null || undefined
-            if (propertyAddress && postalAddress) {
-                const ownerOrContact = owner ? (contact.Postal_Address ? contact : owner) : contact
-                const ownerContactDupeRemoval = []
-                ownerContactDupeRemoval.push(`${ownerOrContact.Postal_Address}-${ownerOrContact.Name}`)
-                const isDupe = ownerContactDupeRemoval.includes(`${ownerOrContact.Postal_Address}-${ownerOrContact.Name}`)
-                if (isDupe) {
-                    const lastMailed = owner?.Last_Mailed || contact?.Last_Mailed || 'Last mailed has not been found'
-                    csvRow = `"${ownerOrContact?.Name}","${ownerOrContact?.Contact_Type}","${ownerOrContact?.Postal_Suburb}","${ownerOrContact?.Postal_State}","${ownerOrContact?.Postal_Postcode}","${propertyAddress}", "${lastMailed}"\r\n`
+            if (!propertyAddress && !postalAddress) {
+                if (!isDupe) {
+                    ownerContactDupeRemoval.push(`${ownerOrRelatedContact.Postal_Address}-${ownerOrRelatedContact.Name}`)
+                    const lastMailed = owner?.Last_Mailed || relatedContact?.Last_Mailed || 'Last mailed has not been found'
+                    csvRow = `"${ownerOrRelatedContact?.Name}","${ownerOrRelatedContact?.Contact_Type}","${postalAddress}","${ownerOrRelatedContact?.Postal_Suburb}","${ownerOrRelatedContact?.Postal_State}","${ownerOrRelatedContact?.Postal_Postcode}","${propertyAddress}", "${lastMailed}"\r\n`
                     csvRow = csvRow.replace(/null/g, '-')
                 }
             }
@@ -48,7 +50,6 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
     const HEADER_ROW = '"Contact Name","Contact Type","Mailing Street Address","Mailing Suburb","Mailing State","Mailing Postcode","Property Address","Property Type (Marketing)","Company", "Last Mailed"\r\n'
     const csvRows = matchingPropertiesAndOwners.map(generateCSVRow).join('')
     const csvData = `${HEADER_ROW}${csvRows}`
-    console.log(csvData.length, 'thuis is csvData')
     const resultsBlob = new Blob(
         [csvData],
         {
