@@ -90,6 +90,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         isPropertyGroupFilterInUse = true
         isPropertyTypeFilterInUse = true
     }
+    console.log('desiredManaged', desiredManaged)
 
     const matchTallies: MatchTallies = {
         neighbour: 0,
@@ -143,5 +144,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             }
         }
     })
+    console.log('matchTallies', matchTallies, matchedProperties.length)
+
     return { matchedProperties, uniqueSearchRecords }
 }

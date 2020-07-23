@@ -38,7 +38,7 @@ export const DEFAULT_SEARCH_PARAMS = {
     neighboursSearchMaxRecords: Infinity,
     propertyTypes: [],
     propertyGroups: [],
-    managed: ['All'],
+    managed: [],
     readyForSearch: false,
     id: `search:${(Math.random() * 1000)}`,
     ...DEFAULT_SALES_EVIDENCE_PARAMS

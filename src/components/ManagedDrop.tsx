@@ -9,7 +9,7 @@ type DropdownProps = {
 
 export function ManagedDrop (props: DropdownProps) {
     const yesNo = [
-        { value: 'All', label: '' },
+        { value: '', label: '' },
         { value: 'Yes', label: 'Yes' },
         { value: 'No', label: 'No' }
     ]
