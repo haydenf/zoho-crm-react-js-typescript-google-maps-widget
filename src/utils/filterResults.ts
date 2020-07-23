@@ -45,8 +45,8 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
     searchParameters.forEach((searchParams: IntersectedSearchAndFilterParams) => {
         let desiredPropertyTypes = searchParams.propertyTypes
         let desiredPropertyGroups = searchParams.propertyGroups
-        let maxResultsForPropertyTypes = Infinity
-        let maxResultsForPropertyGroups = Infinity
+        let maxResultsForPropertyTypes = searchParams.propertyTypesMaxResults
+        let maxResultsForPropertyGroups = searchParams.propertyGroupsMaxResults
         const desiredManaged = searchParams.managed
         const maxNumNeighbours = searchParams.neighboursSearchMaxRecords
 
@@ -59,14 +59,12 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             maxResultsForPropertyGroups = 0
             maxResultsForPropertyTypes = searchParams.propertyTypesMaxResults
         } else {
-            maxResultsForPropertyTypes = maxResultsForPropertyTypes || searchParams.propertyTypesMaxResults
-            maxResultsForPropertyGroups = maxResultsForPropertyGroups || searchParams.propertyGroupsMaxResults
             if (!isPropertyGroupFilterInUse || !isPropertyTypeFilterInUse) {
                 desiredPropertyGroups = ['All']
                 desiredPropertyTypes = ['All']
             } else {
-                desiredPropertyTypes = desiredPropertyTypes || searchParams.propertyTypes
-                desiredPropertyGroups = desiredPropertyGroups || searchParams.propertyGroups
+                desiredPropertyTypes = searchParams.propertyTypes
+                desiredPropertyGroups = searchParams.propertyGroups
             }
             isPropertyGroupFilterInUse = true
             isPropertyTypeFilterInUse = true
@@ -87,7 +85,9 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
             let canAddAnotherProperty = isUnderNeighbourLimit || isUnderPropertyTypeLimit || isUnderPropertyGroupLimit
             if (filterInUse === 'SalesEvidenceFilter') {
-            // N.B. the Sales Evidence Filter doesn't have the ability to search for multiple properties hence only passing in the single search param object.
+                console.log('SalesEvidenceFilter', filterInUse, canAddAnotherProperty)
+
+                // N.B. the Sales Evidence Filter doesn't have the ability to search for multiple properties hence only passing in the single search param object.
                 canAddAnotherProperty = canAddAnotherProperty && salesEvidenceFilter(property, searchParameters[0])
             }
 
@@ -123,7 +123,9 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                 }
             }
         })
+        console.log('matchTallies', matchTallies)
     })
+    console.log('matchedProperties', matchedProperties.length)
 
     return { matchedProperties, uniqueSearchRecords }
 }
