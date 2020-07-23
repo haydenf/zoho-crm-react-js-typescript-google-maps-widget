@@ -63,7 +63,7 @@ export function SearchWidget (props: SearchWidgetProps) {
             <ManagedDrop managed={props.searchParameters.managed} changedManaged={(isManaged) => {
                 props.changeSearchParameters({
                     ...props.searchParameters,
-                    managed: isManaged
+                    managed: [isManaged]
                 })
             }} />
         </form>
