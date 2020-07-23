@@ -37,7 +37,6 @@ export function DownloadContactListButton (props: DownloadButtonProps) {
     }).filter((row) => row).join('')
 
     const csvData = `${csvHeader}${csvRows}`
-    console.log(csvData.length)
     const resultsBlob = new Blob(
         [csvData],
         {
