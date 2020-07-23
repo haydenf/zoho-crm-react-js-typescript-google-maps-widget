@@ -15,11 +15,10 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
         let postalAddress
         let email
         const propertyAddress = propertyObject.Deal_Name
-        const ownerDetails = propertyObject.owner_details
-        const relatedContact: OwnerType = ownerDetails[0]
-        const owner: OwnerType = ownerDetails[1]
+        const relatedContact = propertyObject.owner_details.find((owner: OwnerType) => owner.Contact_Type === 'Director')
+        const owner = propertyObject.owner_details.find((owner: OwnerType) => owner.Contact_Type === 'Owner')
 
-        let ownerOrRelatedContact: OwnerType = owner
+        let ownerOrRelatedContact = owner || null
         if (!relatedContact && owner) {
             doNotMail = owner.Do_Not_Mail
             returnToSender = owner.Return_to_Sender
@@ -34,11 +33,11 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
             ownerOrRelatedContact = relatedContact
         }
 
-        const isDupe = ownerContactDupeRemoval.includes(`${ownerOrRelatedContact.Postal_Address}-${ownerOrRelatedContact.Name}`)
+        const isDupe = ownerContactDupeRemoval.includes(`${ownerOrRelatedContact?.Postal_Address}-${ownerOrRelatedContact?.Name}`)
         if (!doNotMail || !returnToSender || !email) {
-            if (!propertyAddress && !postalAddress) {
+            if (propertyAddress && postalAddress) {
                 if (!isDupe) {
-                    ownerContactDupeRemoval.push(`${ownerOrRelatedContact.Postal_Address}-${ownerOrRelatedContact.Name}`)
+                    ownerContactDupeRemoval.push(`${ownerOrRelatedContact?.Postal_Address}-${ownerOrRelatedContact?.Name}`)
                     const lastMailed = owner?.Last_Mailed || relatedContact?.Last_Mailed || 'Last mailed has not been found'
                     csvRow = `"${ownerOrRelatedContact?.Name}","${ownerOrRelatedContact?.Contact_Type}","${postalAddress}","${ownerOrRelatedContact?.Postal_Suburb}","${ownerOrRelatedContact?.Postal_State}","${ownerOrRelatedContact?.Postal_Postcode}","${propertyAddress}", "${lastMailed}"\r\n`
                     csvRow = csvRow.replace(/null/g, '-')
