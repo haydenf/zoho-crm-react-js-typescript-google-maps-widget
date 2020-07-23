@@ -3,7 +3,7 @@ import Select from 'react-select'
 import { ReactSelectOption } from '../types'
 
 type DropdownProps = {
-    managed: string
+    managed: string[]
     changedManaged: (managed: string) => void
 }
 
