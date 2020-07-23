@@ -86,6 +86,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         } else {
             desiredPropertyTypes = desiredPropertyTypes || searchParameters[0].propertyTypes
             desiredPropertyGroups = desiredPropertyGroups || searchParameters[0].propertyGroups
+
         }
         isPropertyGroupFilterInUse = true
         isPropertyTypeFilterInUse = true

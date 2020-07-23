@@ -7,7 +7,7 @@ export type BaseSearchParamsType = {
   neighboursSearchMaxRecords: number
   propertyGroupsMaxResults: number
   propertyTypesMaxResults: number
-  managed: string[]
+  managed: string
   id: string
 }
 
