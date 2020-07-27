@@ -79,6 +79,15 @@ export function SalesEvidenceSearchWidget (props: SearchWidgetProps) {
                         saleType: newSaleTypes
                     })
                 }} />
+                <label className="thirteen">Select All Records for Sales Evidence Sub Filter
+                    <input type="checkbox" onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        const allRecords = e.target.value === 'on'
+                        props.changeSearchParameters({
+                            ...props.searchParameters,
+                            allRecords
+                        })
+                    }}/>
+                </label>
 
             </form>
         </>
