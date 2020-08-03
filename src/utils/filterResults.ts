@@ -83,24 +83,24 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                 const shouldAddProperty = isManaged && canAddBasedOnFilters
 
                 if (shouldAddProperty) {
-                    if (ownerData.length > 0) {
-                        property.owner_details = ownerData
-                    }
-                    if (propertyTypeMatch) {
-                        matchTallies.propertyType += 1
-                    }
-                    if (propertyGroupMatch) {
-                        matchTallies.propertyGroup += 1
-                    }
-                    if (isUnderNeighbourLimit) {
-                        matchTallies.neighbour += 1
-                    }
+                    const isDupeId = uniqueSearchRecords.includes(property.id)
+                    if (!isDupeId) {
+                    // N. B. This is to remove dupes retrieved during the getPageOfRecords function.
+                        uniqueSearchRecords.push(property.id)
+                        if (ownerData.length > 0) {
+                            property.owner_details = ownerData
+                        }
+                        if (propertyTypeMatch) {
+                            matchTallies.propertyType += 1
+                        }
+                        if (propertyGroupMatch) {
+                            matchTallies.propertyGroup += 1
+                        }
+                        if (isUnderNeighbourLimit) {
+                            matchTallies.neighbour += 1
+                        }
 
-                    if (canAddBasedOnFilters) {
-                        const isDupeId = uniqueSearchRecords.includes(property.id)
-                        if (!isDupeId) {
-                            // N. B. This is to remove dupes retrieved during the getPageOfRecords function.
-                            uniqueSearchRecords.push(property.id)
+                        if (canAddBasedOnFilters) {
                             matchedProperties.push(property)
                         }
                     }
