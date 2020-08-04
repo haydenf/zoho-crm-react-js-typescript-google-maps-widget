@@ -49,23 +49,22 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         const isPropertyGroupFilterInUse = desiredPropertyGroups.length !== 0
 
         const desiredManaged = searchParams.managed
+        const isManagedFilterInUse = desiredManaged !== 'All'
         let maxNumNeighbours = searchParams.neighboursSearchMaxRecords
         let allRecordsForSalesEvidenceFilter = false
-        if ((isPropertyGroupFilterInUse || isPropertyTypeFilterInUse) && searchParams.neighboursSearchMaxRecords === Infinity) {
-            maxNumNeighbours = 0
-        }
         if (filterInUse === 'SalesEvidenceFilter') {
             allRecordsForSalesEvidenceFilter = searchParams.allRecords
-            if ((!isPropertyGroupFilterInUse || !isPropertyTypeFilterInUse || allRecordsForSalesEvidenceFilter) && searchParams.neighboursSearchMaxRecords === Infinity) {
+            if (!allRecordsForSalesEvidenceFilter && searchParams.neighboursSearchMaxRecords === Infinity) {
                 maxNumNeighbours = 0
             }
-
-            if (!isPropertyGroupFilterInUse) {
+            if (!isPropertyGroupFilterInUse && allRecordsForSalesEvidenceFilter) {
                 desiredPropertyGroups.push('All')
             }
-            if (!isPropertyTypeFilterInUse) {
+            if (!isPropertyTypeFilterInUse && allRecordsForSalesEvidenceFilter) {
                 desiredPropertyTypes.push('All')
             }
+        } else if ((isPropertyGroupFilterInUse || isPropertyTypeFilterInUse || isManagedFilterInUse) && searchParams.neighboursSearchMaxRecords === Infinity) {
+            maxNumNeighbours = 0
         }
 
         const maxResultsForPropertyTypes: number = searchParams.propertyTypesMaxResults
@@ -85,7 +84,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             const isUnderPropertyTypeLimit = matchTallies.propertyType < maxResultsForPropertyTypes
             const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
             const canAddBasedOnMaxResults = isUnderNeighbourLimit || isUnderPropertyTypeLimit || isUnderPropertyGroupLimit
-
+            // debugger
             if (canAddBasedOnMaxResults) {
                 const propertyTypeMatch = isPropertyTypeFilterInUse && isUnderPropertyTypeLimit && matchForPropertyTypes(property, desiredPropertyTypes)
                 const propertyGroupMatch = isPropertyGroupFilterInUse && isUnderPropertyGroupLimit && matchForPropertyGroups(property, desiredPropertyGroups)
@@ -96,15 +95,16 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                     canAddBasedOnFilters = allRecordsForSalesEvidenceFilter ? true : canAddBasedOnFilters && salesEvidenceFilter(searchParams, property)
                 }
 
-                const ownerData = getOwnerData(property)
                 const isManaged = (property.Managed === desiredManaged) || desiredManaged === 'All'
-                const shouldAddProperty = isManaged && (canAddBasedOnFilters || isUnderNeighbourLimit)
-
-                if (shouldAddProperty) {
+                // is managed needs to work on its own but also in conjunction with both type and group this finds all managed when used on its own but not managed type or group
+                const shouldAddProperty = isManaged || canAddBasedOnFilters
+                if (shouldAddProperty || isUnderNeighbourLimit) {
                     const isDupeId = uniqueSearchRecords.includes(property.id)
                     if (!isDupeId) {
-                    // N. B. This is to remove dupes retrieved during the getPageOfRecords function.
+                        // N. B. This is to remove dupes retrieved during the getPageOfRecords function.
                         uniqueSearchRecords.push(property.id)
+
+                        const ownerData = getOwnerData(property)
                         if (ownerData.length > 0) {
                             property.owner_details = ownerData
                         }
@@ -117,10 +117,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                         if (isUnderNeighbourLimit && !canAddBasedOnFilters) {
                             matchTallies.neighbour += 1
                         }
-
-                        if (canAddBasedOnFilters || isUnderNeighbourLimit) {
-                            matchedProperties.push(property)
-                        }
+                        matchedProperties.push(property)
                     }
                 }
             }
