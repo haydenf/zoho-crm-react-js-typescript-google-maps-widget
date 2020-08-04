@@ -50,8 +50,22 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
 
         const desiredManaged = searchParams.managed
         let maxNumNeighbours = searchParams.neighboursSearchMaxRecords
+        let allRecordsForSalesEvidenceFilter = false
         if ((isPropertyGroupFilterInUse || isPropertyTypeFilterInUse) && searchParams.neighboursSearchMaxRecords === Infinity) {
             maxNumNeighbours = 0
+        }
+        if (filterInUse === 'SalesEvidenceFilter') {
+            allRecordsForSalesEvidenceFilter = searchParams.allRecords
+            if ((!isPropertyGroupFilterInUse || !isPropertyTypeFilterInUse || allRecordsForSalesEvidenceFilter) && searchParams.neighboursSearchMaxRecords === Infinity) {
+                maxNumNeighbours = 0
+            }
+
+            if (!isPropertyGroupFilterInUse) {
+                desiredPropertyGroups.push('All')
+            }
+            if (!isPropertyTypeFilterInUse) {
+                desiredPropertyTypes.push('All')
+            }
         }
 
         const maxResultsForPropertyTypes: number = searchParams.propertyTypesMaxResults
@@ -75,13 +89,12 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             if (canAddBasedOnMaxResults) {
                 const propertyTypeMatch = isPropertyTypeFilterInUse && isUnderPropertyTypeLimit && matchForPropertyTypes(property, desiredPropertyTypes)
                 const propertyGroupMatch = isPropertyGroupFilterInUse && isUnderPropertyGroupLimit && matchForPropertyGroups(property, desiredPropertyGroups)
+
                 let canAddBasedOnFilters = propertyGroupMatch || propertyTypeMatch
                 if (filterInUse === 'SalesEvidenceFilter') {
                     // N.B. the Sales Evidence Filter doesn't have the ability to search for multiple properties hence only passing in the single search param object.
-                    const allRecordsForSalesEvidenceFilter = searchParams.allRecords
                     canAddBasedOnFilters = allRecordsForSalesEvidenceFilter ? true : canAddBasedOnFilters && salesEvidenceFilter(searchParams, property)
                 }
-                console.log('canAddBasedOnFilters', canAddBasedOnFilters)
 
                 const ownerData = getOwnerData(property)
                 const isManaged = (property.Managed === desiredManaged) || desiredManaged === 'All'
@@ -111,7 +124,6 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                     }
                 }
             }
-            console.log('matchTallies', matchTallies, trueA.length, falseA.length)
         })
     })
 
