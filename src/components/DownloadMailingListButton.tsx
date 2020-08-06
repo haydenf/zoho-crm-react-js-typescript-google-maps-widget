@@ -48,7 +48,7 @@ export function DownloadMailingListButton (props: DownloadButtonProps) {
         return csvRow
     }
 
-    const HEADER_ROW = '"Contact Name","Contact Type","Mailing Street Address","Mailing Suburb","Mailing State","Mailing Postcode","Property Address","Property Type (Marketing)", "Last Mailed"\r\n'
+    const HEADER_ROW = 'Contact Name,Contact Type,Mailing Street Address,Mailing Suburb,Mailing State,Mailing Postcode,Property Address,Property Type (Marketing),Last Mailed\r\n'
     const csvRows = matchingPropertiesAndOwners.map(generateCSVRow).join('')
     const csvData = `${HEADER_ROW}${csvRows}`
     const resultsBlob = new Blob(
