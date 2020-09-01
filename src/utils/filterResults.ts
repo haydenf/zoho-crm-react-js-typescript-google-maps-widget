@@ -106,7 +106,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                 const propertyGroupMatch = isPropertyGroupFilterInUse && isUnderPropertyGroupLimit && matchForPropertyGroups(property, desiredPropertyGroups)
                 const propertyGroupAndTypeMatch = propertyGroupMatch || propertyTypeMatch
 
-                let canAddBasedOnFilters: boolean | undefined = propertyGroupAndTypeMatch
+                let canAddBasedOnFilters: boolean = propertyGroupAndTypeMatch
                 let salesOrLeaseMatch: boolean | undefined = false
                 if (subFilterInUse) {
                     // N.B. when using sales evidence filter and type or group aren't used
@@ -115,15 +115,14 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                     }
                     if (filterInUse === 'SalesEvidenceFilter') {
                         salesOrLeaseMatch = salesEvidenceFilter(searchParams, property)
-                        canAddBasedOnFilters = canAddBasedOnFilters && salesOrLeaseMatch
+                        canAddBasedOnFilters = typeof salesOrLeaseMatch === 'undefined' ? canAddBasedOnFilters : canAddBasedOnFilters && salesOrLeaseMatch
                     }
                     if (filterInUse === 'LeasesEvidenceFilter') {
                         salesOrLeaseMatch = leasesEvidenceFilter(searchParams, property)
-                        canAddBasedOnFilters = canAddBasedOnFilters && salesOrLeaseMatch
+                        canAddBasedOnFilters = typeof salesOrLeaseMatch === 'undefined' ? canAddBasedOnFilters : canAddBasedOnFilters && salesOrLeaseMatch
                     }
                 }
                 const isManaged = typeof property.Managed === 'string' ? property.Managed === desiredManaged || desiredManaged === 'All' : property.Managed
-
                 let shouldAddProperty
                 const arePropertyFiltersInUse = isPropertyGroupFilterInUse || isPropertyTypeFilterInUse
                 if (isManagedFilterInUse && !arePropertyFiltersInUse && !isSalesOrLeaseFiltersInUse) {
@@ -158,7 +157,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                     // N.B. to correctly add neighbours to the count depending on what filter is used
                     // and whether managed filter is used. If these filters are used it won't add to
                     // the neighbours count
-                    let canAddToNeighbourCountBasedOnFilters: boolean | string | undefined = canAddBasedOnFilters
+                    let canAddToNeighbourCountBasedOnFilters: boolean | string = canAddBasedOnFilters
                     if (filterInUse === 'BaseFilter') {
                         if (isManagedFilterInUse && !arePropertyFiltersInUse) {
                             canAddToNeighbourCountBasedOnFilters = !canAddBasedOnFilters && !isManaged
@@ -177,9 +176,10 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                                 canAddToNeighbourCountBasedOnFilters = (!isManaged && !propertyGroupAndTypeMatch) || !salesOrLeaseMatch
                             }
                         } else {
-                            canAddToNeighbourCountBasedOnFilters = isPropertyTypeOrGroupMaxRecordInUse ? !propertyGroupAndTypeMatch : !propertyGroupAndTypeMatch || !salesOrLeaseMatch
+                            canAddToNeighbourCountBasedOnFilters = isPropertyTypeOrGroupMaxRecordInUse ? !propertyGroupAndTypeMatch : !propertyGroupAndTypeMatch && !salesOrLeaseMatch
                         }
                     }
+
                     if (isUnderNeighbourLimit && canAddToNeighbourCountBasedOnFilters) {
                         matchTallies.neighbour += 1
                     }

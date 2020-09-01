@@ -29,7 +29,7 @@ function prepareDataForMap (results: UnprocessedResultsFromCRM[], searchAddressP
         },
         addressesToRender: results.map((result) => {
             return {
-                address: result.Deal_Name || result.Full_Address,
+                address: result.Deal_Name || result.Property.name,
                 position: {
                     lat: parseFloat(result.Latitude),
                     lng: parseFloat(result.Longitude)
