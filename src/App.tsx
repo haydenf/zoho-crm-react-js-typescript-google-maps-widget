@@ -125,7 +125,7 @@ function App () {
 
     return (
         <div className="App">
-            <SearchWidgetsWrapper changeSearchParameters={changeSearchParameters} searchParameters={searchParameters} setReadyForSearch={setReadyForSearch} setFilterInUse={setFilterInUse} filterInUse={filterInUse}/>
+            <SearchWidgetsWrapper changeSearchParameters={changeSearchParameters} searchParameters={searchParameters} setReadyForSearch={setReadyForSearch} setFilterInUse={setFilterInUse} filterInUse={filterInUse} updateResults={updateResults}/>
             {isLoading &&
                 <div style={{ padding: '20px' }}>
                     Loading... estimated waiting time 10 seconds.

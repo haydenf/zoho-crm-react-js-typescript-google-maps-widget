@@ -75,6 +75,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
         const isPropertyTypeFilterInUse = desiredPropertyTypes.length !== 0
         const isPropertyGroupFilterInUse = desiredPropertyGroups.length !== 0
         const isPropertyTypeOrGroupMaxRecordInUse = searchParams.propertyTypesMaxResults !== Infinity || searchParams.propertyGroupsMaxResults !== Infinity
+        const isNeighbourMaxInUse = searchParams.neighboursSearchMaxRecords !== Infinity
 
         const desiredManaged = searchParams.managed
         const isManagedFilterInUse = desiredManaged !== 'All'
@@ -108,6 +109,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
 
                 let canAddBasedOnFilters: boolean = propertyGroupAndTypeMatch
                 let salesOrLeaseMatch: boolean | undefined = false
+                debugger
                 if (subFilterInUse) {
                     // N.B. when using sales evidence filter and type or group aren't used
                     if (!isPropertyGroupFilterInUse && !isPropertyTypeFilterInUse) {
@@ -176,10 +178,50 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                                 canAddToNeighbourCountBasedOnFilters = (!isManaged && !propertyGroupAndTypeMatch) || !salesOrLeaseMatch
                             }
                         } else {
-                            canAddToNeighbourCountBasedOnFilters = isPropertyTypeOrGroupMaxRecordInUse ? !propertyGroupAndTypeMatch : !propertyGroupAndTypeMatch && !salesOrLeaseMatch
+                            // Covers
+                            //  sub filter +
+                            if (isPropertyTypeOrGroupMaxRecordInUse) {
+                                if (isNeighbourMaxInUse) {
+                                    // group/type + max group/type + neighbour
+                                    canAddToNeighbourCountBasedOnFilters = !propertyGroupAndTypeMatch
+                                } else {
+                                    // group/type + group/type max
+                                    canAddToNeighbourCountBasedOnFilters = !propertyGroupAndTypeMatch || !salesOrLeaseMatch
+                                }
+                            } else {
+                                if (isNeighbourMaxInUse) {
+                                    // neighbour
+                                    // group
+                                    canAddToNeighbourCountBasedOnFilters = filterInUse === 'LeasesEvidenceFilter' ? !propertyGroupAndTypeMatch || !salesOrLeaseMatch : !propertyGroupAndTypeMatch && !salesOrLeaseMatch
+                                } else {
+                                    // group/type + neighbour
+                                    canAddToNeighbourCountBasedOnFilters = !propertyGroupAndTypeMatch || !salesOrLeaseMatch
+                                }
+                            }
+                            // Issue
+                            // When neighbours max is used
+                            // !propertyGroupAndTypeMatch && !salesOrLeaseMatch = 203
+                            // !salesOrLeaseMatch = 153
+                            // !propertyGroupAndTypeMatch || !salesOrLeaseMatch = 132
+                            // !canAddBasedOnFilters = 132
+                            // canAddToNeighbourCountBasedOnFilters = isPropertyTypeOrGroupMaxRecordInUse ? !propertyGroupAndTypeMatch || !canAddBasedOnFilters : !propertyGroupAndTypeMatch || !salesOrLeaseMatch
+                            // !propertyGroupAndTypeMatch || !salesOrLeaseMatch
+                            // this WORKS with
+                            // 1) sub filter
+                            // 2) sub filter + group + group max
+                            // NOT WORK
+                            // 1) group or type + max neighbours + max group or type
+                            // 2) sub filter + neighbour
+                            // !propertyGroupAndTypeMatch && !salesOrLeaseMatch
+                            // WORKS
+                            // 1) sub filter
+                            //
+                            // NOT WORKS
+                            // 1) sub filter + group + neighbour
+                            // 2) sub filter + group + group max
                         }
                     }
-
+                    debugger
                     if (isUnderNeighbourLimit && canAddToNeighbourCountBasedOnFilters) {
                         matchTallies.neighbour += 1
                     }

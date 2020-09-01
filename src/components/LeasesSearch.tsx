@@ -48,13 +48,13 @@ export function LeasesSearch (props: LeasesSearchProps) {
                     <DatePicker className='border' selected={props.searchParameters.leasedDate.min} dateFormat='dd/MM/yyyy' placeholderText='Min' onChange={(changeDate: Date) => {
                         props.changeSearchParameters({
                             ...props.searchParameters,
-                            leasedDate: { min: changeDate, max: props.searchParameters.leasedDate.max }
+                            leasedDate: { min: changeDate || undefined, max: props.searchParameters.leasedDate.max }
                         })
                     }} />
                     <DatePicker className='border' selected={props.searchParameters.leasedDate.max} dateFormat='dd/MM/yyyy' placeholderText='Max' onChange={(changeDate: Date) => {
                         props.changeSearchParameters({
                             ...props.searchParameters,
-                            leasedDate: { min: props.searchParameters.leasedDate.min, max: changeDate }
+                            leasedDate: { min: props.searchParameters.leasedDate.min, max: changeDate || undefined }
                         })
                     }} />
                 </label>
@@ -62,13 +62,13 @@ export function LeasesSearch (props: LeasesSearchProps) {
                     <DatePicker className='border' selected={props.searchParameters.reviewDate.min} dateFormat='dd/MM/yyyy' placeholderText='Min' onChange={(changeDate: Date) => {
                         props.changeSearchParameters({
                             ...props.searchParameters,
-                            reviewDate: { min: changeDate, max: props.searchParameters.reviewDate.max }
+                            reviewDate: { min: changeDate || undefined, max: props.searchParameters.reviewDate.max }
                         })
                     }} />
                     <DatePicker className='border' selected={props.searchParameters.reviewDate.max} dateFormat='dd/MM/yyyy' placeholderText='Max' onChange={(changeDate: Date) => {
                         props.changeSearchParameters({
                             ...props.searchParameters,
-                            reviewDate: { min: props.searchParameters.reviewDate.min, max: changeDate }
+                            reviewDate: { min: props.searchParameters.reviewDate.min, max: changeDate || undefined }
                         })
                     }}/>
                 </label>

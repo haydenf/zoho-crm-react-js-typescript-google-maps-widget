@@ -49,13 +49,13 @@ export function SalesEvidenceSearchWidget (props: SearchWidgetProps) {
                     <DatePicker className='border' selected={props.searchParameters.dateSold.min} placeholderText='Min' dateFormat='dd/MM/yyyy' onChange={(changeDate: Date) => {
                         props.changeSearchParameters({
                             ...props.searchParameters,
-                            dateSold: { min: changeDate, max: props.searchParameters.dateSold.max }
+                            dateSold: { min: changeDate || undefined, max: props.searchParameters.dateSold.max }
                         })
                     }} />
                     <DatePicker className='border' selected={props.searchParameters.dateSold.max} placeholderText='Max' dateFormat='dd/MM/yyyy' onChange={(changeDate: Date) => {
                         props.changeSearchParameters({
                             ...props.searchParameters,
-                            dateSold: { min: props.searchParameters.dateSold.min, max: changeDate }
+                            dateSold: { min: props.searchParameters.dateSold.min, max: changeDate || undefined }
                         })
                     }}/>
                 </label>
