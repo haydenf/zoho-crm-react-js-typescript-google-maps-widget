@@ -72,24 +72,24 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
     searchParameters.forEach((searchParams: IntersectedSearchAndFilterParams, index: number) => {
         const desiredPropertyTypes = searchParams.propertyTypes
         const desiredPropertyGroups = searchParams.propertyGroups
-        const isPropertyTypeFilterInUse = desiredPropertyTypes.length !== 0
-        const isPropertyGroupFilterInUse = desiredPropertyGroups.length !== 0
-        const isPropertyTypeOrGroupMaxRecordInUse = searchParams.propertyTypesMaxResults !== Infinity || searchParams.propertyGroupsMaxResults !== Infinity
-        const isNeighbourMaxInUse = searchParams.neighboursSearchMaxRecords !== Infinity
-
         const desiredManaged = searchParams.managed
-        const isManagedFilterInUse = desiredManaged !== 'All'
-
-        const isBaseFiltersInUse = isPropertyGroupFilterInUse || isPropertyTypeFilterInUse || isManagedFilterInUse
-        const isSalesOrLeaseFiltersInUse = checkSalesOrLeaseFilter(searchParams)
-
-        let maxNumNeighbours = searchParams.neighboursSearchMaxRecords
-        const subFilterInUse = filterInUse === 'SalesEvidenceFilter' || filterInUse === 'LeasesEvidenceFilter'
-        if ((isBaseFiltersInUse || subFilterInUse) && searchParams.neighboursSearchMaxRecords === Infinity) {
-            maxNumNeighbours = 0
-        }
         const maxResultsForPropertyTypes: number = searchParams.propertyTypesMaxResults
         const maxResultsForPropertyGroups: number = searchParams.propertyGroupsMaxResults
+
+        const isPropertyTypeFilterInUse = desiredPropertyTypes.length !== 0
+        const isPropertyGroupFilterInUse = desiredPropertyGroups.length !== 0
+        const isPropertyFiltersInUse = isPropertyGroupFilterInUse || isPropertyTypeFilterInUse
+        const isManagedFilterInUse = desiredManaged !== 'All'
+        const isBaseFiltersInUse = isPropertyGroupFilterInUse || isPropertyTypeFilterInUse || isManagedFilterInUse
+        const isPropertyTypeOrGroupMaxRecordInUse = searchParams.propertyTypesMaxResults !== Infinity || searchParams.propertyGroupsMaxResults !== Infinity
+        const isNeighbourMaxInUse = searchParams.neighboursSearchMaxRecords !== Infinity
+        const isSalesOrLeaseFiltersInUse = checkSalesOrLeaseFilter(searchParams)
+        const isSubFilterInUse = filterInUse === 'SalesEvidenceFilter' || filterInUse === 'LeasesEvidenceFilter'
+
+        let maxNumNeighbours = searchParams.neighboursSearchMaxRecords
+        if ((isBaseFiltersInUse || isSalesOrLeaseFiltersInUse) && !isNeighbourMaxInUse) {
+            maxNumNeighbours = 0
+        }
 
         const matchTallies: MatchTallies = {
             neighbour: 0,
@@ -102,6 +102,7 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
             const isUnderPropertyTypeLimit = matchTallies.propertyType < maxResultsForPropertyTypes
             const isUnderPropertyGroupLimit = matchTallies.propertyGroup < maxResultsForPropertyGroups
             const canAddBasedOnMaxResults = isUnderNeighbourLimit || isUnderPropertyTypeLimit || isUnderPropertyGroupLimit
+
             if (canAddBasedOnMaxResults) {
                 const propertyTypeMatch = isPropertyTypeFilterInUse && isUnderPropertyTypeLimit && matchForPropertyTypes(property, desiredPropertyTypes)
                 const propertyGroupMatch = isPropertyGroupFilterInUse && isUnderPropertyGroupLimit && matchForPropertyGroups(property, desiredPropertyGroups)
@@ -109,8 +110,8 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
 
                 let canAddBasedOnFilters: boolean = propertyGroupAndTypeMatch
                 let salesOrLeaseMatch: boolean | undefined = false
-                debugger
-                if (subFilterInUse) {
+
+                if (isSubFilterInUse) {
                     // N.B. when using sales evidence filter and type or group aren't used
                     if (!isPropertyGroupFilterInUse && !isPropertyTypeFilterInUse) {
                         canAddBasedOnFilters = true
@@ -124,16 +125,17 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                         canAddBasedOnFilters = typeof salesOrLeaseMatch === 'undefined' ? canAddBasedOnFilters : canAddBasedOnFilters && salesOrLeaseMatch
                     }
                 }
+
                 const isManaged = typeof property.Managed === 'string' ? property.Managed === desiredManaged || desiredManaged === 'All' : property.Managed
+
                 let shouldAddProperty
-                const arePropertyFiltersInUse = isPropertyGroupFilterInUse || isPropertyTypeFilterInUse
-                if (isManagedFilterInUse && !arePropertyFiltersInUse && !isSalesOrLeaseFiltersInUse) {
+                if (isManagedFilterInUse && !isPropertyFiltersInUse && !isSalesOrLeaseFiltersInUse) {
                     // N.B. used to show all properties that are managed
                     shouldAddProperty = isManaged
-                } else if (isManagedFilterInUse && (arePropertyFiltersInUse || isSalesOrLeaseFiltersInUse)) {
-                    if (subFilterInUse) {
+                } else if (isManagedFilterInUse && (isPropertyFiltersInUse || isSalesOrLeaseFiltersInUse)) {
+                    if (isSubFilterInUse) {
                         // N.B. Each base filter (Managed, Type, Group) has to work independently with the sub filters. This is to get managed to work independently with subfilter
-                        shouldAddProperty = arePropertyFiltersInUse ? (isManaged && salesOrLeaseMatch) || canAddBasedOnFilters : isManaged && salesOrLeaseMatch
+                        shouldAddProperty = isPropertyFiltersInUse ? (isManaged && salesOrLeaseMatch) || canAddBasedOnFilters : isManaged && salesOrLeaseMatch
                     } else {
                         // N.B. used to show properties type or group and if they are managed
                         shouldAddProperty = isManaged && canAddBasedOnFilters
@@ -142,7 +144,12 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                     shouldAddProperty = canAddBasedOnFilters
                 }
 
-                if (shouldAddProperty || isUnderNeighbourLimit) {
+                if (isSubFilterInUse && isNeighbourMaxInUse && !isSalesOrLeaseFiltersInUse && !isPropertyFiltersInUse) {
+                    shouldAddProperty = canAddBasedOnFilters && isUnderNeighbourLimit
+                } else {
+                    shouldAddProperty = shouldAddProperty || isUnderNeighbourLimit
+                }
+                if (shouldAddProperty) {
                     // N.B. Owner is not required in leases evidence filter
                     if (filterInUse !== 'LeasesEvidenceFilter') {
                         const ownerData = getOwnerData(property)
@@ -161,24 +168,25 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                     // the neighbours count
                     let canAddToNeighbourCountBasedOnFilters: boolean | string = canAddBasedOnFilters
                     if (filterInUse === 'BaseFilter') {
-                        if (isManagedFilterInUse && !arePropertyFiltersInUse) {
+                        // Managed in base filter
+                        if (isManagedFilterInUse && !isPropertyFiltersInUse) {
                             canAddToNeighbourCountBasedOnFilters = !canAddBasedOnFilters && !isManaged
-                        } else if (isManagedFilterInUse && arePropertyFiltersInUse) {
+                        } else if (isManagedFilterInUse && isPropertyFiltersInUse) {
                             canAddToNeighbourCountBasedOnFilters = !canAddBasedOnFilters || !isManaged
                         } else {
                             canAddToNeighbourCountBasedOnFilters = !canAddBasedOnFilters
                         }
                     } else {
-                        if (isManagedFilterInUse && !arePropertyFiltersInUse) {
+                        // Managed in sub filters
+                        if (isManagedFilterInUse && !isPropertyFiltersInUse) {
                             canAddToNeighbourCountBasedOnFilters = !salesOrLeaseMatch || !isManaged
-                        } else if (isManagedFilterInUse && arePropertyFiltersInUse) {
+                        } else if (isManagedFilterInUse && isPropertyFiltersInUse) {
                             if (isPropertyTypeOrGroupMaxRecordInUse) {
                                 canAddToNeighbourCountBasedOnFilters = filterInUse === 'LeasesEvidenceFilter' ? (!isManaged && !propertyGroupAndTypeMatch) || !salesOrLeaseMatch : !isManaged && !propertyGroupAndTypeMatch
                             } else {
                                 canAddToNeighbourCountBasedOnFilters = (!isManaged && !propertyGroupAndTypeMatch) || !salesOrLeaseMatch
                             }
                         } else {
-                            // Covers
                             //  sub filter +
                             if (isPropertyTypeOrGroupMaxRecordInUse) {
                                 if (isNeighbourMaxInUse) {
@@ -189,39 +197,11 @@ export default function filterResults (unsortedPropertyResults: UnprocessedResul
                                     canAddToNeighbourCountBasedOnFilters = !propertyGroupAndTypeMatch || !salesOrLeaseMatch
                                 }
                             } else {
-                                if (isNeighbourMaxInUse) {
-                                    // neighbour
-                                    // group
-                                    canAddToNeighbourCountBasedOnFilters = filterInUse === 'LeasesEvidenceFilter' ? !propertyGroupAndTypeMatch || !salesOrLeaseMatch : !propertyGroupAndTypeMatch && !salesOrLeaseMatch
-                                } else {
-                                    // group/type + neighbour
-                                    canAddToNeighbourCountBasedOnFilters = !propertyGroupAndTypeMatch || !salesOrLeaseMatch
-                                }
+                                canAddToNeighbourCountBasedOnFilters = isPropertyFiltersInUse ? !propertyGroupAndTypeMatch || !salesOrLeaseMatch : !propertyGroupAndTypeMatch && !salesOrLeaseMatch
                             }
-                            // Issue
-                            // When neighbours max is used
-                            // !propertyGroupAndTypeMatch && !salesOrLeaseMatch = 203
-                            // !salesOrLeaseMatch = 153
-                            // !propertyGroupAndTypeMatch || !salesOrLeaseMatch = 132
-                            // !canAddBasedOnFilters = 132
-                            // canAddToNeighbourCountBasedOnFilters = isPropertyTypeOrGroupMaxRecordInUse ? !propertyGroupAndTypeMatch || !canAddBasedOnFilters : !propertyGroupAndTypeMatch || !salesOrLeaseMatch
-                            // !propertyGroupAndTypeMatch || !salesOrLeaseMatch
-                            // this WORKS with
-                            // 1) sub filter
-                            // 2) sub filter + group + group max
-                            // NOT WORK
-                            // 1) group or type + max neighbours + max group or type
-                            // 2) sub filter + neighbour
-                            // !propertyGroupAndTypeMatch && !salesOrLeaseMatch
-                            // WORKS
-                            // 1) sub filter
-                            //
-                            // NOT WORKS
-                            // 1) sub filter + group + neighbour
-                            // 2) sub filter + group + group max
                         }
                     }
-                    debugger
+
                     if (isUnderNeighbourLimit && canAddToNeighbourCountBasedOnFilters) {
                         matchTallies.neighbour += 1
                     }

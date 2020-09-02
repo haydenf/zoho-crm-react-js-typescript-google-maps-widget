@@ -100,7 +100,7 @@ export function ResultsTableWidget (props: ResultsTableProps) {
                                          <td>{convertToCurrency(result.Current_Per_Sqm)}</td>
                                          <td>{result.Land_Area_sqm}</td>
                                          <td>{result.Build_Area_sqm}</td>
-                                         <td>{convertToCurrency(result.Current_Rental)}</td>
+                                         <td>{convertToCurrency(result.Current_AI_New_Market_Rental)}</td>
                                      </tr>
                                  )
                              })}

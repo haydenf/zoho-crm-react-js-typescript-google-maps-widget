@@ -21,16 +21,16 @@ export default function leasesEvidenceFilter (filterParameters: LeasesEvidenceFi
         doesPropertyFitCriteria = typeof doesPropertyFitCriteria === 'undefined' ? genericNumberFilter(landArea, 'Land_Area_sqm', property) : doesPropertyFitCriteria && genericNumberFilter(landArea, 'Land_Area_sqm', property)
     }
 
-    // Filter field Build Area m2
+    // Filter field - Build Area m2
     const isBuildAreaFilterInUse = buildArea.min !== FILTER_NOT_USED_NUM_TYPE && buildArea.max !== FILTER_NOT_USED_NUM_TYPE
     if (isBuildAreaFilterInUse) {
         doesPropertyFitCriteria = typeof doesPropertyFitCriteria === 'undefined' ? genericNumberFilter(buildArea, 'Build_Area_sqm', property) : doesPropertyFitCriteria && genericNumberFilter(buildArea, 'Build_Area_sqm', property)
     }
 
-    // Filter field - Rent Gross
+    // Filter field - Rent Gross (Current Market Rental)
     const isRentGrossFilterInUse = rentGross.min !== FILTER_NOT_USED_NUM_TYPE && rentGross.max !== FILTER_NOT_USED_NUM_TYPE
     if (isRentGrossFilterInUse) {
-        doesPropertyFitCriteria = typeof doesPropertyFitCriteria === 'undefined' ? genericNumberFilter(rentGross, 'Current_Rental', property) : doesPropertyFitCriteria && genericNumberFilter(rentGross, 'Current_Rental', property)
+        doesPropertyFitCriteria = typeof doesPropertyFitCriteria === 'undefined' ? genericNumberFilter(rentGross, 'Current_AI_New_Market_Rental', property) : doesPropertyFitCriteria && genericNumberFilter(rentGross, 'Current_AI_New_Market_Rental', property)
     }
 
     // Filter field - Rent $/m2
