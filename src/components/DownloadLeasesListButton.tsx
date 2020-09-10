@@ -19,7 +19,7 @@ export default function DownloadLeasesListButton (props: DownloadButtonProps) {
         const tenantName = propertyObject.Lessee?.name || ''
         const leasedDate = formatDate(propertyObject.Start_Date)
         const reviewDate = formatDate(propertyObject.Last_MR_Start_Date)
-        let csvRow = `"${propertyAddress}","${tenancyName}","${rentPerDollarMeter}","${landArea}","${buildArea}","${rentCommence}","${rentCurrent}",${tenantName},"${leasedDate}","${reviewDate}"\r\n`
+        let csvRow = `"${propertyAddress}","${tenancyName}","${rentPerDollarMeter}","${landArea}","${buildArea}","${rentCommence}","${rentCurrent}",${tenantName.replace(/,/gi, '')},"${leasedDate}","${reviewDate}"\r\n`
         csvRow = csvRow.replace(/null/g, '-')
         return csvRow
     }
